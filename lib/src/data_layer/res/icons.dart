@@ -46,6 +46,23 @@ class AppIcons {
     height: 18,
     width: 18,
   );
+  static Widget arrowRight = SvgPicture.asset(
+    "/icons/arrow-right.svg",
+    height: 14,
+    width: 14,
+  );
+
+  static Widget downloadIcon = SvgPicture.asset(
+    "/icons/download_icon.svg",
+    height: 24,
+    width: 24,
+  );
+
+  static Widget profileCircle = SvgPicture.asset(
+    "/icons/profile-circle.svg",
+    // height: 14,
+    // width: 14,
+  );
 
   static Widget profileIcon = SvgPicture.asset(
     "/icons/profile.svg",
@@ -75,6 +92,38 @@ class AppIcons {
   static Widget bannerIcon = SvgPicture.asset(
     "/icons/banner_icon.svg",
     color: AppColors.whiteColor,
+  );
+
+  static Widget calenderIcon = SvgPicture.asset(
+    "/icons/calendar.svg",
+  );
+  static Widget crossIcon = SvgPicture.asset(
+    "/icons/cross_icon.svg",
+  );
+
+  static Widget sendNotificationIcon = SvgPicture.asset(
+    "/icons/send_notification.svg",
+    // color: Colors.black,
+  );
+
+  static Widget eyeIcon = SvgPicture.asset(
+    "/icons/eye.svg",
+  );
+
+  static Widget redIndicator = SvgPicture.asset(
+    "/icons/indicator.svg",
+  );
+
+  static Widget addIcon = SvgPicture.asset(
+    "/icons/add.svg",
+  );
+
+  static Widget arrowUpDropdown = SvgPicture.asset(
+    "/icons/arrow-up.svg",
+  );
+
+  static Widget arrowDownDropdown = SvgPicture.asset(
+    "/icons/arrow-down.svg",
   );
 
   /// svg images - end --------------------------------------------------------

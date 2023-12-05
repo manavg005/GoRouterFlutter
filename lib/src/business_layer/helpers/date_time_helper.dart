@@ -100,4 +100,20 @@ class DateTimeHelper {
     var formattedTime = DateFormat('hh:mm a').format(date); // 12:34 PM format
     return "$formattedTime, ${date.day} $monthName ${date.year}";
   }
+
+  /// get date in format 06-12-2001
+  static String getCustomDateFormat(DateTime date) {
+    var day = DateFormat('dd').format(date);
+    var month = DateFormat('MM').format(date);
+    var year = DateFormat('yyyy').format(date);
+
+    return "$day-$month-$year";
+  }
+
+  /// get time in format 12:00 PM
+  static String getTime(DateTime date) {
+    var formattedTime = DateFormat.jm().format(date); // 12:34 PM format
+
+    return "$formattedTime ";
+  }
 }

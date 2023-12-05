@@ -7,8 +7,9 @@ class AppColors {
   static const darkGray = Color.fromRGBO(124, 117, 117, 1);
 
   static const containerGray = Color.fromRGBO(151, 151, 151, 0.1);
-  static const Color blueShadeColor = Color.fromRGBO(64, 123, 255, 1);
+  static const Color blueLightShadeColor = Color.fromRGBO(231, 245, 255, 1);
   static const Color greyLightShadeColor = Color.fromRGBO(152, 152, 152, 1);
+  static const Color titleAlertDialogColor = Color.fromRGBO(146, 141, 141, 1);
   static const darkGrayText = Color.fromRGBO(97, 97, 97, 1);
   static const lightGrayText = Color.fromRGBO(147, 137, 137, 1.0);
   static const descriptionText = Color.fromRGBO(118, 118, 118, 1.0);
@@ -16,7 +17,11 @@ class AppColors {
   static const textTitleColor = Color.fromRGBO(85, 82, 82, 1);
   static const dashboardText = Color.fromRGBO(112, 112, 112, 1);
   static const lightGray = Color.fromRGBO(182, 182, 182, 1);
+  static const paymentDoneGreen = Color.fromRGBO(7, 131, 59, 1);
   static const priceGreen = Color.fromRGBO(0, 142, 103, 1);
+  static const toastGreen = Color.fromRGBO(81, 163, 80, 1);
+  static const bookingIdGreen = Color.fromRGBO(0, 122, 131, 1);
+  static const newBookingTextColor = Color.fromRGBO(186, 104, 200, 1);
   static const backgroundSuccessGreen = Color.fromRGBO(216, 237, 231, 1);
   static const iconBlue = Color.fromRGBO(11, 74, 174, 1);
   static const contactUsPageBlue = Color.fromRGBO(16, 29, 73, 1);
@@ -28,6 +33,9 @@ class AppColors {
   static const myBookingOTP = Color.fromRGBO(38, 50, 56, 1);
   static const backgroundProgressOrange = Color.fromRGBO(255, 244, 214, 1);
   static const errorRed = Color.fromRGBO(237, 0, 0, 1);
+  static const buttonLightRed = Color.fromRGBO(255, 114, 94, 1);
+  static const buttonTextRed = Color.fromRGBO(255, 88, 64, 1);
+  static const buttonBackgroundRed = Color.fromRGBO(255, 114, 94, 0.1);
   static const bookingCompletedBlue = Color.fromRGBO(211, 225, 255, 1);
   static const bookingCancelledRed = Color.fromRGBO(239, 88, 123, 1);
   static const bookingTextRed = Color.fromRGBO(140, 0, 0, 1);
@@ -81,7 +89,7 @@ class AppColors {
   static const Color readOnlyColor = Color.fromRGBO(237, 237, 237, 1);
   static const Color lightBackgroundColor = Color.fromRGBO(249, 249, 249, 1);
   static const Color backgroundColor = Color.fromRGBO(241, 241, 241, 1);
-  static const Color themeGreenColor = Color.fromRGBO(49, 164, 82, 1);
+  static const Color themeGreenColor = Color.fromRGBO(16, 206, 0, 1);
   static const Color orangeColor = Color.fromRGBO(255, 125, 36, 1);
   static const Color themeOrangeColor = Color.fromRGBO(240, 124, 0, 1);
   static const Color yellowColor = Color.fromRGBO(255, 186, 31, 1);
@@ -103,6 +111,12 @@ class AppColors {
   static const Color greyOpacity = Color.fromRGBO(200, 200, 200, 1);
   static const Color opacityBlack = Color.fromRGBO(90, 90, 90, 1);
   static const Color dividerFeedbackColor = Color.fromRGBO(244, 242, 242, 1);
+
+  static Color startColor = Color.fromRGBO(81, 163, 80, 1);
+  static Color endColor = Color.fromRGBO(244, 242, 242, 1);
+
+  static String linearGradient =
+      "linear-gradient(to right, ${startColor.value.toRadixString(16)}, ${endColor.value.toRadixString(16)})";
 
   static const LinearGradient orangeGradient = LinearGradient(colors: [
     Color.fromRGBO(255, 125, 36, 0.5),

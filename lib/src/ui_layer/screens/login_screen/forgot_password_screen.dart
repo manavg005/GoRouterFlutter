@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/utils/responsive.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/styles.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/base_widget.dart';
 
-import '../../business_layer/helpers/device_info_helper.dart';
-import '../../business_layer/utils/helper/validator.dart';
-import '../../data_layer/res/colors.dart';
-import '../../data_layer/res/icons.dart';
-import '../../data_layer/res/numbers.dart';
-import '../../data_layer/res/regex.dart';
-import '../widgets/app_buttons.dart';
-import '../widgets/app_text_field.dart';
+import '../../../business_layer/helpers/device_info_helper.dart';
+import '../../../business_layer/utils/helper/validator.dart';
+import '../../../data_layer/res/colors.dart';
+import '../../../data_layer/res/icons.dart';
+import '../../../data_layer/res/images.dart';
+import '../../../data_layer/res/numbers.dart';
+import '../../../data_layer/res/regex.dart';
+import '../../widgets/app_buttons.dart';
+import '../../widgets/app_text_field.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({super.key});
@@ -21,12 +23,7 @@ class ForgetPasswordScreen extends StatefulWidget {
 }
 
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
-  bool passwordVisible = true;
   TextEditingController _emailController = TextEditingController();
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +38,14 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
-          flex: 2,
+          flex: 3,
           child: textfieldContainer(),
         ),
-        Expanded(
-          flex: 3,
-          child: imageContainer(),
-        )
+        if (Responsive.isDesktop(context))
+          Expanded(
+            flex: 4,
+            child: _imageContainer(),
+          )
       ],
     );
   }
@@ -60,7 +58,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // AppStyles.sbHeight104,
-          PoppinsSemiBold600(
+          const PoppinsSemiBold600(
             text: "Forgot Password",
             fontSize: 30,
           ),
@@ -83,27 +81,23 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     );
   }
 
-  Widget imageContainer() {
+  Widget _imageContainer() {
     return Container(
-      color: Colors.green,
-      child: Image.asset(
-        'images/welcome.png',
-        fit: BoxFit.fill,
-      ),
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      child: AppImages.welcomeImage,
     );
   }
 
   Widget _continueButton() {
     return AnimatedButton(
-      onPressed: () {
-        print("Button clicked");
-      },
+      onPressed: () {},
       title: "CONTINUE",
       width: DeviceInfo.width,
       height: AppStyles.getHeight(58),
       // loading: _loginSignupProvider.isLoading,
       buttonColor: AppColors.mainColor,
-      titleTextStyle: TextStyle(
+      titleTextStyle: const TextStyle(
         color: AppColors.fadeWhite,
         fontWeight: FontWeight.w500,
         fontSize: 16,

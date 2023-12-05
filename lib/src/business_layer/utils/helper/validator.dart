@@ -90,27 +90,27 @@ class ValidatorHelper {
     }
     // Check if the password length is at least 8 characters
     if (password.length < 8) {
-      return 'Password length should be atleast 8';
+      return 'Password length should be at least 8';
     }
 
     // Check if the password contains at least one uppercase letter
     if (!password.contains(RegExp(r'[A-Z]'))) {
-      return 'Please enter valid password';
+      return 'Password must contains at least one uppercase letter';
     }
 
     // Check if the password contains at least one lowercase letter
     if (!password.contains(RegExp(r'[a-z]'))) {
-      return 'Message';
+      return 'Password must contains at least one lowercase letter';
     }
 
     // Check if the password contains at least one number
     if (!password.contains(RegExp(r'[0-9]'))) {
-      return 'Message';
+      return 'Password must contains at least one number';
     }
 
     // Check if the password contains at least one special character
     if (!password.contains(RegExp(r'[!@#$%^&*()_+{}\[\]:;<>,.?~\\|/-]'))) {
-      return 'Message';
+      return 'Password contains at least one special character';
     }
 
     // If all criteria are met, the password is strong

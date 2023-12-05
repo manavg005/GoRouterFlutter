@@ -28,7 +28,7 @@ class UserStateHiveHelper {
     } catch (e) {
       /// If hive db gives some error then it is initialized and open again
       /// and generate again encryption key for encrypted hive box
-      await HiveHelper.initializeHiveAndRegisterAdapters();
+      // await HiveHelper.initializeHiveAndRegisterAdapters();
       await SecureStorageHelper.instance.generateEncryptionKey();
       return await Hive.openBox(
         Boxes.userBox,
@@ -107,5 +107,16 @@ class UserStateHiveHelper {
     final isSocialLogin =
         await encryptedBox.get(Boxes.isSocialLogin, defaultValue: false);
     return isSocialLogin;
+  }
+
+  Future<String> getUserDetails() async {
+    final Box<dynamic> encryptedBox = await _open();
+    final userDetails = await encryptedBox.get(Boxes.userDetails);
+    return userDetails;
+  }
+
+  Future<void> setUserDetails(String? userDetails) async {
+    final Box<dynamic> encryptedBox = await _open();
+    await encryptedBox.put(Boxes.userDetails, userDetails);
   }
 }

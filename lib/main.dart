@@ -1,24 +1,23 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/rendering.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/flavor_configuration_helper.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/local_db/hive_database_helper.dart';
-import 'package:keypitkleen_flutter_admin/src/data_layer/local_db/user_state_hive_helper.dart';
-import 'package:keypitkleen_flutter_admin/src/data_layer/res/styles.dart';
 import 'package:keypitkleen_flutter_admin/src/key_pit_kleen_app.dart';
-import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/login_screen.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 void main() async {
+  debugPaintSizeEnabled = false;
+  setPathUrlStrategy();
   runApp(const KeyPitKleenApp());
 
   /// run the app in a zone
   /// this will catch all the errors in the app
   /// and log them to the crashlytics
   // runZonedGuarded(() async {
-  //   /// initialize the widgets binding
-  //   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  //   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  // /// initialize the widgets binding
+  // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   //   ///* Sets the status bar color of the widget */
   //   AppStyles.setStatusBarTheme();
   //
@@ -28,19 +27,21 @@ void main() async {
   //   ///* Sets the device orientation of application */
   //   AppStyles.setDeviceOrientationOfApp();
   //
-  //   /// setting the server config
-  //   /// this will set the server config based on the flavor
-  //   /// see [AppSettings] for more details
-  //   FlavorConfig.setServerConfig();
+  WidgetsFlutterBinding.ensureInitialized();
+
+  /// setting the server config
+  /// this will set the server config based on the flavor
+  /// see [AppSettings] for more details
+  FlavorConfig.setServerConfig();
   //
   //   // /// initialize the firebase
   //   // FirebaseInitializer.instance.init();
-  //
-  //   /// initialize the hive and register the adapters
-  //   await HiveHelper.initializeHiveAndRegisterAdapters();
-  //
-  //   /// generate the encryption key for secure storage
-  //   await SecureStorageHelper.instance.generateEncryptionKey();
+
+  /// initialize the hive and register the adapters
+  // await HiveHelper.initializeHiveAndRegisterAdapters();
+
+  /// generate the encryption key for secure storage
+  // await SecureStorageHelper.instance.generateEncryptionKey();
   //
   //   bool isOnboardingCompleted =
   //       await UserStateHiveHelper.instance.getIsOnboardingCompleted();
@@ -72,7 +73,7 @@ void main() async {
   //   /// remove the splash screen
   //   // FlutterNativeSplash.remove();
   // }, (error, stack) {
-  //   /// log the error to the crashlytics
-  //   // CrashlyticsHelper.instance.logError(error, stack);
+  /// log the error to the crashlytics
+  // CrashlyticsHelper.instance.logError(error, stack);
   // });
 }

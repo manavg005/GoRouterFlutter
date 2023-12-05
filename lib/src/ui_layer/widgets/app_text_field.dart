@@ -13,7 +13,7 @@ class CommonTextField extends StatelessWidget {
       {Key? key,
       required this.controller,
       required this.hint,
-      required this.labelText,
+      this.labelText,
       this.icon,
       this.validator,
       this.error = false,
@@ -81,7 +81,7 @@ class CommonTextField extends StatelessWidget {
   final bool toolBarOptions;
   final bool autofocus;
   final Widget? icon;
-  final String labelText;
+  final String? labelText;
   final Color labelTextColor;
   final AutovalidateMode autoValidateMode;
   final double? hintTextSize;
@@ -180,7 +180,7 @@ class CommonTextField extends StatelessWidget {
         icon != null ? icon! : const SizedBox(),
         AppStyles.sbWidth3,
         CommonText(
-          text: labelText,
+          text: labelText ?? "",
           fontSize: labelTextSize != null
               ? AppStyles.getFontSize(labelTextSize!)
               : 14,
@@ -277,78 +277,97 @@ class SearchTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(d_10),
-      child: TextField(
-        obscureText: obscureText,
-        obscuringCharacter: "*",
-        enabled: enabled,
-        onChanged: onChanged,
-        maxLength: maxLength,
-        onTap: onTap,
-        onSubmitted: onSubmitted,
-        cursorWidth: d_2,
-        maxLines: maxLines,
-        minLines: minLines,
-        autofocus: autofocus,
-        cursorRadius: const Radius.circular(d_10),
-        controller: controller,
-        scrollPhysics: const ClampingScrollPhysics(),
-        style: style ??
-            AppStyles.subtitleStyle(
-              color: AppColors.blackColor,
-              fontWeight: FontWeight.w500,
+    return Column(
+      children: [
+        AppStyles.sbHeight6,
+        ClipRRect(
+          borderRadius: BorderRadius.circular(d_10),
+          child: TextField(
+            obscureText: obscureText,
+            obscuringCharacter: "*",
+            enabled: enabled,
+            onChanged: onChanged,
+            maxLength: maxLength,
+            onTap: onTap,
+            onSubmitted: onSubmitted,
+            cursorWidth: d_2,
+            maxLines: maxLines,
+            minLines: minLines,
+            autofocus: autofocus,
+            cursorRadius: const Radius.circular(d_10),
+            controller: controller,
+            scrollPhysics: const ClampingScrollPhysics(),
+            style: style ??
+                AppStyles.subtitleStyle(
+                  color: AppColors.blackColor,
+                  fontWeight: FontWeight.w500,
+                ),
+            cursorColor: AppColors.headingBlackColor,
+            // cursorHeight: Platform.isIOS && !DeviceInfo.extraLargeDevice ? d_15 : d_20,
+            textInputAction: textInputAction ?? TextInputAction.done,
+            keyboardType: keyboardType,
+            inputFormatters: inputFormatters,
+            keyboardAppearance: Brightness.light,
+            textCapitalization: textCapitalization,
+            readOnly: readOnly,
+            decoration: InputDecoration(
+              counterText: "",
+              suffixIcon: suffixIcon != null
+                  ? IconButton(
+                      onPressed: onSuffixTap ?? () {},
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      splashRadius: d_1,
+                      icon: controller!.text.isNotEmpty
+                          ? suffixIcon!
+                          : AppIcons.searchIcon,
+                    )
+                  : null,
+              prefixIconConstraints: prefixConstraints,
+              prefixIcon: prefixIcon != null
+                  ? IconButton(
+                      onPressed: onPrefixTap ?? () {},
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      splashRadius: d_1,
+                      icon: prefixIcon!,
+                    )
+                  : null,
+              hintText: hint,
+              hintStyle: AppStyles.subtitleStyle(
+                fontSize: AppStyles.getFontSize(12),
+                color: AppColors.subHeadingBlackColor,
+              ),
+              filled: filled,
+              fillColor: fillColor ?? AppColors.readOnlyColor,
+              focusedBorder: _inputBorder(),
+              enabledBorder: _inputBorder(),
+              isDense: true,
+              border: _inputBorder(),
+              contentPadding: AppStyles.textFieldContentPadding,
             ),
-        cursorColor: AppColors.headingBlackColor,
-        // cursorHeight: Platform.isIOS && !DeviceInfo.extraLargeDevice ? d_15 : d_20,
-        textInputAction: textInputAction ?? TextInputAction.done,
-        keyboardType: keyboardType,
-        inputFormatters: inputFormatters,
-        keyboardAppearance: Brightness.light,
-        textCapitalization: textCapitalization,
-        readOnly: readOnly,
-        decoration: InputDecoration(
-          counterText: "",
-          suffixIcon: suffixIcon != null
-              ? IconButton(
-                  onPressed: onSuffixTap ?? () {},
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  splashRadius: d_1,
-                  icon: controller!.text.isNotEmpty
-                      ? suffixIcon!
-                      : AppIcons.searchIcon,
-                )
-              : null,
-          prefixIconConstraints: prefixConstraints,
-          prefixIcon: prefixIcon != null
-              ? IconButton(
-                  onPressed: onPrefixTap ?? () {},
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  splashRadius: d_1,
-                  icon: prefixIcon!,
-                )
-              : null,
-          hintText: hint,
-          hintStyle: AppStyles.subtitleStyle(
-            fontSize: AppStyles.getFontSize(12),
-            color: AppColors.subHeadingBlackColor,
+            // toolbarOptions: ToolbarOptions(
+            //   copy: toolBarOptions,
+            //   cut: toolBarOptions,
+            //   paste: toolBarOptions,
+            //   selectAll: toolBarOptions,
+            // ),
           ),
-          filled: filled,
-          fillColor: fillColor ?? AppColors.readOnlyColor,
-          focusedBorder: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          isDense: true,
-          border: InputBorder.none,
-          contentPadding: AppStyles.textFieldContentPadding,
         ),
-        // toolbarOptions: ToolbarOptions(
-        //   copy: toolBarOptions,
-        //   cut: toolBarOptions,
-        //   paste: toolBarOptions,
-        //   selectAll: toolBarOptions,
-        // ),
+      ],
+    );
+  }
+
+  OutlineInputBorder _inputBorder() {
+    return OutlineInputBorder(
+      borderSide: BorderSide(
+        width: 0.5,
+        color: AppColors.subHeadingBlackColor,
+      ),
+      borderRadius: BorderRadius.all(
+        Radius.circular(
+          radius ?? d_10,
+        ),
       ),
     );
   }
@@ -364,6 +383,7 @@ class CommonTextFieldWithTitle extends StatelessWidget {
       this.maxline = 1,
       Key? key,
       this.validation,
+      this.onSuffixTap,
       this.inputFormatters,
       this.obscureText,
       this.keyboardType,
@@ -380,6 +400,7 @@ class CommonTextFieldWithTitle extends StatelessWidget {
   final TextEditingController controller;
   final Widget? suffixIcon;
   final String? Function(String? text)? validation;
+  final void Function()? onSuffixTap;
   final List<TextInputFormatter>? inputFormatters;
   final int maxline;
   final int minline;
@@ -402,7 +423,7 @@ class CommonTextFieldWithTitle extends StatelessWidget {
             PoppinsNormal500(
               text: title ?? "",
               fontSize: titleSize,
-              color: AppColors.textFieldLabelColor,
+              color: AppColors.blackColor,
             )
           ],
         ),
@@ -412,7 +433,15 @@ class CommonTextFieldWithTitle extends StatelessWidget {
           controller: controller,
           hint: hintText ?? "",
           inputBorderColor: AppColors.textFieldBorder,
-          suffixIcon: suffixIcon,
+          suffixIcon: suffixIcon != null
+              ? IconButton(
+                  onPressed: onSuffixTap ?? () {},
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  splashRadius: d_1,
+                  icon: suffixIcon!,
+                )
+              : null,
           maxLines: maxline,
           validator: validation,
           prefixIcon: prefixIcon,
@@ -421,8 +450,8 @@ class CommonTextFieldWithTitle extends StatelessWidget {
           keyboardType: keyboardType,
           maxLength: maxLength,
           enabled: enable,
-          filled: !enable,
-          fillColor: AppColors.greyDisabledTextField,
+          filled: enable,
+          fillColor: AppColors.whiteColor,
           minLines: minline,
           // fillColor: !enable ? Colors.blueGrey : Colors.white,
         )

@@ -22,26 +22,27 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      shape: LinearBorder.start(),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 14),
         color: AppColors.mainColor,
         child: Column(
           children: [
             DrawerHeader(
+              decoration: const BoxDecoration(
+                color: AppColors.mainColor,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   AppIcons.appIcon,
                   AppStyles.sbWidth4,
-                  PoppinsNormal500(
+                  const PoppinsNormal500(
                     text: "KeyPitKleen",
                     fontSize: 20,
                     color: AppColors.whiteColor,
                   ),
                 ],
-              ),
-              decoration: BoxDecoration(
-                color: AppColors.mainColor, // Customize the header color
               ),
             ),
             buildListTile(AppIcons.dashboardIcon, 'Dashboard', 0, () {
@@ -97,7 +98,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
         title: Text(
           title,
           style: TextStyle(
-            color: AppColors.whiteColor, // Change text color for active item
+            color: AppColors.whiteColor,
           ),
         ),
         onTap: () {

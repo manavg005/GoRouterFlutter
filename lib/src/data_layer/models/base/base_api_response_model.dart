@@ -1,10 +1,12 @@
-import '../../business_layer/network/request_response_type.dart';
+import '../../../business_layer/network/request_response_type.dart';
 
 class BaseApiResponseModel {
   BaseApiResponseModel({
     this.exceptionType = ExceptionType.noException,
     this.data,
   });
+
+
 
   ExceptionType exceptionType;
   dynamic data;

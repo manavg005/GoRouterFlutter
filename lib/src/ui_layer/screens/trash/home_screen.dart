@@ -2,17 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/icons.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/styles.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/home_screen/change_password_screen.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/cleaner_management/view_cleaner_details.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/home_screen/banner_management.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/home_screen/cleaner_management.dart';
-import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/home_screen/dashboard.dart';
-import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/home_screen/payement_management.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/notification_management/notification_management.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/home_screen/dashboard_screen.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/home_screen/payment_management.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/home_screen/user_management.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/notification_management/send_notification_screen.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/base_widget.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/drawer_widget.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/popup_menu.dart';
 
 import '../../../data_layer/res/colors.dart';
 import '../../widgets/app_text.dart';
-import 'booking_management.dart';
+import '../home_screen/booking_management.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, this.id});
@@ -55,23 +60,10 @@ class _HomeScreenState extends State<HomeScreen> {
           flex: 4,
           child: Scaffold(
             appBar: AppBar(
+              // elevation: 50,
               backgroundColor: AppColors.whiteColor,
-              actions: [
-                Row(
-                  children: [
-                    AppIcons.appIcon,
-                    AppStyles.sbWidth10,
-                    PoppinsNormal500(
-                      text: "Alan Walker",
-                      fontSize: 12,
-                    ),
-                    AppStyles.sbWidth10,
-                    GestureDetector(
-                        onTap: () => print("User Name clicked"),
-                        child: AppIcons.arrowDown),
-                    AppStyles.sbWidth32,
-                  ],
-                )
+              actions: const [
+                PopUpMenu(),
               ],
             ),
             body: getSelectedScreen(),
@@ -84,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget getSelectedScreen() {
     switch (_selectedIndex) {
       case 0:
-        return DashboardScreen();
+        return SendNotificationScreen();
       case 1:
         return UserManagementScreen();
       case 2:
@@ -94,9 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case 4:
         return PaymentManagementScreen();
       case 5:
-        return Center(
-          child: Text("Notification"),
-        );
+        return NotificationManagementScreen();
       case 6:
         return BannerManagementScreen();
       case 7:

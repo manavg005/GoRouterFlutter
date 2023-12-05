@@ -7,10 +7,11 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/network/request_response_type.dart';
+import 'package:keypitkleen_flutter_admin/src/data_layer/models/base/base_api_response_model.dart';
 import 'package:provider/provider.dart';
 
-import '../../data_layer/base/base_api_response_model.dart';
 import '../../data_layer/local_db/user_state_hive_helper.dart';
 import '../../key_pit_kleen_app.dart';
 import '../helpers/dialog_util.dart';
@@ -31,12 +32,12 @@ class AppNetwork {
   /// Internal method to create instance of [AppNetwork] class
   AppNetwork._create() {
     _dioClient = Dio();
-    (_dioClient!.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
-        (HttpClient client) {
-      client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
-      return client;
-    };
+    // (_dioClient!.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
+    //     (HttpClient client) {
+    //   client.badCertificateCallback =
+    //       (X509Certificate cert, String host, int port) => true;
+    //   return client;
+    // };
     _dioClient!.options.baseUrl = _baseUrl;
     _dioClient!.options.responseType = ResponseType.json;
     _dioClient!.options.sendTimeout = const Duration(seconds: 30);
@@ -125,7 +126,10 @@ class AppNetwork {
           return BaseApiResponseModel(
               exceptionType: ExceptionType.apiException);
         // case HttpResponseCode.forbidden:
-        // case HttpResponseCode.unAuthorized:
+        case HttpResponseCode.unAuthorized:
+          navigatorKey.currentContext!.go('/login');
+          return BaseApiResponseModel(
+              exceptionType: ExceptionType.apiException);
         default:
           return BaseApiResponseModel(
             data: serverResponse,
@@ -184,6 +188,7 @@ class AppNetwork {
       case DioErrorType.badResponse:
         LogHelper.logError(
             "Api Error Response Message ====> ${error.requestOptions.path}, ${error.message}, ${error.response}");
+        UserStateHiveHelper.instance.setIsUserLoggedIn(false);
         if (error.response?.statusCode == HttpResponseCode.unAuthorized) {
           _sessionExpired(error.response!.data['msg']);
           return BaseApiResponseModel(
@@ -212,6 +217,8 @@ class AppNetwork {
   /// Method used to handle session expired
   void _sessionExpired(dynamic response) {
     try {
+      navigatorKey.currentContext!.go('/login');
+
       print("######Session expired#####");
 
       /// handle session expired
@@ -221,12 +228,14 @@ class AppNetwork {
         _logOut();
       });
     } catch (e) {
+      navigatorKey.currentContext!.go('/login');
       LogHelper.logError(e.toString());
     }
   }
 
   _logOut() {
     print("in app network");
+
 /*    UserStateHiveHelper.instance.clearData();
     UserStateHiveHelper.instance.setIsOnboardingCompleted(true);
     SocialLoginHelper.instance.signOut();

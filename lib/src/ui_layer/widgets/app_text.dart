@@ -73,7 +73,7 @@ class CommonText2 extends StatelessWidget {
       maxLines: maxLines,
       style: TextStyle(
           color: color,
-          fontSize: AppStyles.getFontSize(fontSize),
+          fontSize: fontSize,
           height: height,
           decoration: textDecoration,
           fontWeight: fontWeight),
@@ -354,6 +354,72 @@ class PoppinsExtraBold900 extends StatelessWidget {
         height: height,
         decoration: textDecoration,
       ),
+    );
+  }
+}
+
+class CommonRichTextDouble extends StatelessWidget {
+  const CommonRichTextDouble({
+    super.key,
+    this.text1,
+    this.text2,
+    this.style1,
+    this.style2,
+  });
+
+  final String? text1;
+  final String? text2;
+  final TextStyle? style1;
+  final TextStyle? style2;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text.rich(
+      TextSpan(
+        text: text1 ?? "",
+        style: style1,
+        children: [
+          TextSpan(
+            text: text2 ?? "",
+            style: style2,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CommonTwoColumnText extends StatelessWidget {
+  const CommonTwoColumnText({
+    super.key,
+    required this.headingText,
+    required this.subText,
+    this.subColor = Colors.black,
+  });
+
+  final String headingText;
+  final String subText;
+  final Color subColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      // mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        PoppinsNormal500(
+          text: headingText,
+          fontSize: 10,
+          height: 1,
+          color: AppColors.titleAlertDialogColor,
+        ),
+        PoppinsSemiBold600(
+          text: subText,
+          fontSize: 13,
+          height: 1.5,
+          color: subColor,
+        )
+      ],
     );
   }
 }

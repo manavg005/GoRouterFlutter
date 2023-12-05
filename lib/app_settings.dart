@@ -7,5 +7,5 @@ class AppSettings {
 
   /// This variable is used to set the server config
   /// flavors -> dev, staging, production
-  static Flavor flavor = Flavor.dev;
+  static Flavor flavor = Flavor.qa;
 }

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/network/request_response_type.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../data_layer/res/numbers.dart';
+import '../../key_pit_kleen_app.dart';
 import 'device_info_helper.dart';
 import 'log_helper.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UtilHelper {
   UtilHelper.__internal();
@@ -269,5 +272,30 @@ class UtilHelper {
     }
 
     return maskedPhoneNumber;
+  }
+
+  /// function to get exception message on the bases of exception type
+  /// Method used to get exception messages
+  String getExceptionMessage({required ExceptionType? exceptionType}) {
+    AppLocalizations localizations =
+        AppLocalizations.of(navigatorKey.currentContext!)!;
+    switch (exceptionType) {
+      case ExceptionType.apiException:
+        return localizations.api_exception_message;
+      case ExceptionType.timeOutException:
+        return localizations.timeOut_exception_message;
+      case ExceptionType.socketException:
+        return localizations.socket_exception_message;
+      case ExceptionType.parseException:
+        return localizations.parse_exception_message;
+      case ExceptionType.otherException:
+        return localizations.other_exception_message;
+      case ExceptionType.cancelException:
+        return localizations.cancel_exception_message;
+      case ExceptionType.noException:
+        return "";
+      default:
+        return localizations.something_wrong;
+    }
   }
 }

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:keypitkleen_flutter_admin/src/provider_registration.dart';
-import 'package:provider/provider.dart';
-
 import 'business_layer/helpers/device_info_helper.dart';
 import 'business_layer/helpers/log_helper.dart';
 import 'business_layer/routes/app_router_confi.dart';
@@ -16,7 +15,7 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 class KeyPitKleenApp extends StatefulWidget {
   const KeyPitKleenApp({
     super.key,
-    /*required this.initialScreen*/
+    // /*required this.initialScreen*/
   });
 
   // final Widget initialScreen;
@@ -76,28 +75,23 @@ class _KeyPitKleenAppState extends State<KeyPitKleenApp>
   Widget build(BuildContext context) {
     DeviceInfo.setDeviceInfo(context);
     ScreenUtil.init(context, designSize: const Size(375, 812));
-    return MultiProvider(
-      providers: RegisterProviders.providers(context),
-      child: GestureDetector(
-        onTap: () {
-          FocusManager.instance.primaryFocus?.unfocus();
-        },
-        child: MaterialApp.router(
-          routerConfig: AppRouter().goRoute,
-          title: 'KeyPit Kleen',
-          debugShowCheckedModeBanner: false,
-          onGenerateTitle: (context) => AppLocalizations.of(context)!.app_name,
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            fontFamily: "Poppins",
-          ),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          // navigatorKey: navigatorKey,
-          // home: widget.initialScreen,
-          // routeInformationParser: AppRouter().goRoute.routeInformationParser,
-          // routerDelegate: AppRouter().goRoute.routerDelegate,
+    return MultiBlocProvider(
+      providers: RegisterBloc.blocs(context),
+      child: MaterialApp.router(
+        routerConfig: router,
+        title: 'KeyPit Kleen',
+        debugShowCheckedModeBanner: false,
+        onGenerateTitle: (context) => AppLocalizations.of(context)!.app_name,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          fontFamily: "Poppins",
         ),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        // navigatorKey: navigatorKey,
+        // home: widget.initialScreen,
+        // routeInformationParser: router.routeInformationParser,
+        // routerDelegate: router.routerDelegate,
       ),
     );
   }

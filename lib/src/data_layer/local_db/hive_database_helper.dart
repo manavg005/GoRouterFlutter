@@ -84,6 +84,7 @@ class Boxes {
   static const String isOnboardingDone = 'isOnboardingDone';
   static const String isSocialLogin = 'isSocialLogin';
   static const String userAddress = 'user_address_model';
+  static const String userDetails = 'userDetails';
 }
 
 class HiveTypes {

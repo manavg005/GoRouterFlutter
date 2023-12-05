@@ -1,5 +1,5 @@
-enum SocialLoginType { google, facebook, apple }
+enum MyBookingTab { newBooking, accepted, past }
 
-enum MyBookingTab { inProgress, completed, cancelled }
+enum BookingProgressStatus { pending, ongoing, completed }
 
-enum BookingProgressStatus { accepted, ongoing, awaiting }
+enum CommonSwitchScreen { user, cleaner, notification }
