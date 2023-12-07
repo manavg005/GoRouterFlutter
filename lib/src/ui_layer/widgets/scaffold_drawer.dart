@@ -6,8 +6,8 @@ import 'package:keypitkleen_flutter_admin/src/data_layer/res/icons.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/styles.dart';
 import 'package:keypitkleen_flutter_admin/src/key_pit_kleen_app.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/home_screen/change_password_screen.dart';
-import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/home_screen/banner_management.dart';
-import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/home_screen/cleaner_management.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/banner_management/banner_management.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/cleaner_management/cleaner_management.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/notification_management/send_notification_screen.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/base_widget.dart';
@@ -22,8 +22,20 @@ import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/home_screen/user_
 class ScaffoldWithDrawer extends StatefulWidget {
   const ScaffoldWithDrawer({
     super.key,
+    required this.navigationShell,
   });
-  // final StatefulNavigationShell navigationShell;
+  final StatefulNavigationShell navigationShell;
+
+  void _goBranch(int index) {
+    navigationShell.goBranch(
+      index,
+      // A common pattern when using bottom navigation bars is to support
+      // navigating to the initial location when tapping the item that is
+      // already active. This example demonstrates how to support this behavior,
+      // using the initialLocation parameter of goBranch.
+      initialLocation: index == navigationShell.currentIndex,
+    );
+  }
 
   @override
   State<ScaffoldWithDrawer> createState() => _ScaffoldWithDrawerState();
@@ -84,12 +96,12 @@ class _ScaffoldWithDrawerState extends State<ScaffoldWithDrawer> {
       List.generate(tabs.length, (index) => GlobalKey<NavigatorState>());
 
   final List<Widget> destinations = [
-    const DashboardScreen(),
+    // const DashboardScreen(),
     const UserManagementScreen(),
     const SendNotificationScreen(),
     const BookingManagementScreen(),
     const PaymentManagementScreen(),
-    const NotificationManagementScreen(),
+    // const NotificationManagementScreen(),
     const BannerManagementScreen(),
     const ChangePasswordScreen(),
   ];

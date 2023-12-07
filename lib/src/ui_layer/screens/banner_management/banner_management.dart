@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/colors.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/icons.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/images.dart';
@@ -8,6 +9,7 @@ import 'package:keypitkleen_flutter_admin/src/data_layer/res/styles.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_buttons.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text_field.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_app_bar.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/data_table.dart';
 
 import '../../widgets/base_widget.dart';
@@ -31,7 +33,8 @@ class _BannerManagementScreenState extends State<BannerManagementScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseWidget(
+    return BaseWidgetWithAppBar(
+      appBar: CommonAppBar(),
       body: _buildBody(),
     );
   }
@@ -55,7 +58,9 @@ class _BannerManagementScreenState extends State<BannerManagementScreen> {
                 ),
                 const Spacer(),
                 CommonAppButton(
-                  onTap: () {},
+                  onTap: () {
+                    context.go('/banner-management/add-banner');
+                  },
                   text: "Add Banner",
                   fontSize: 12,
                   radius: 5,

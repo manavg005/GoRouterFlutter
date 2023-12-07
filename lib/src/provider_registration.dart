@@ -28,7 +28,9 @@ class RegisterBloc {
         ),
         BlocProvider(
           create: (context) => NotificationBloc(),
-          child: NotificationManagementScreen(),
+          child: NotificationManagementScreen(
+            detailsPath: '',
+          ),
         ),
         // ChangeNotifierProvider<BaseProvider>(
         //   create: (context) => BaseProvider(),

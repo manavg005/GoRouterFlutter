@@ -115,7 +115,7 @@ class AppColors {
   static Color startColor = Color.fromRGBO(81, 163, 80, 1);
   static Color endColor = Color.fromRGBO(244, 242, 242, 1);
 
-  static String linearGradient =
+  static String blueLinearGradient =
       "linear-gradient(to right, ${startColor.value.toRadixString(16)}, ${endColor.value.toRadixString(16)})";
 
   static const LinearGradient orangeGradient = LinearGradient(colors: [

@@ -22,6 +22,7 @@ class ApiConstants {
   static const String login = "admin/login";
   static const String homeManagement = "admin/home-management";
   static const String userManagement = "admin/user-management";
+  static const String cleanerManagement = "admin/cleaner-management";
   static const String bookingManagement = "admin/booking-management";
   static const String notificationManagement = "admin/list-notification";
   static const String paymentManagement = "admin/payment-management";

@@ -1,5 +1,5 @@
 {
-  "app_name": "KeyPit Kleen",
+  "app_name": "KeyPitKleen",
   "version": "1.0.0",
   "api_exception_message": "We are working on your request. Please try after sometime.",
   "timeOut_exception_message": "We detect slow internet connection at your end. Please go to a good internet zone and try again.",

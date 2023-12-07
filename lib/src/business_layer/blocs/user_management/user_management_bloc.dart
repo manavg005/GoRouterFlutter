@@ -28,18 +28,19 @@ class UserManagementBloc
     on<UserManagementLoadMoreEvent>(userManagementLoadMoreEvent);
     on<UserManagementLoadPreviousEvent>(userManagementLoadPreviousEvent);
     on<UserActiveInactiveEvent>(userActiveInactiveEvent);
+    on<UserManagementSearchEvent>(userManagementSearchEvent);
   }
 
   Future<void> userManagementInitialEvent(UserManagementInitialEvent event,
       Emitter<UserManagementState> emit) async {
-    await _loadData(1, emit); // Load initial data
+    await _loadData("", 1, emit); // Load initial data
   }
 
   Future<void> userManagementLoadMoreEvent(UserManagementLoadMoreEvent event,
       Emitter<UserManagementState> emit) async {
     if (state is UserManagementSuccessState) {
       final int nextPage = _currentPage + 1;
-      await _loadData(nextPage, emit);
+      await _loadData("", nextPage, emit);
     }
   }
 
@@ -48,15 +49,16 @@ class UserManagementBloc
       Emitter<UserManagementState> emit) async {
     if (state is UserManagementSuccessState) {
       final int nextPage = _currentPage - 1;
-      await _loadData(nextPage, emit);
+      await _loadData("", nextPage, emit);
     }
   }
 
-  Future<void> _loadData(int page, Emitter<UserManagementState> emit) async {
+  Future<void> _loadData(
+      String search, int page, Emitter<UserManagementState> emit) async {
     emit(UserManagementLoadingState());
 
     final BaseApiResponseModel response =
-        await _dashboardRepository.userManagement(page);
+        await _dashboardRepository.userManagement(search, page);
 
     if (response.data != null && response.data is UserManagementResponseModel) {
       _userManagementResponseModel = response.data;
@@ -65,16 +67,15 @@ class UserManagementBloc
         _currentPage = page;
 
         if (page == 1) {
-          /// If it's the initial load, emit UserManagementSuccessState
           emit(UserManagementSuccessState(
-              userManagementResponseModel: _userManagementResponseModel,
-              hasMoreData: (_userManagementResponseModel
-                          .data?.userData?.modifiedData?.length ??
-                      0) >=
-                  10,
-              currentPage: page));
+            userManagementResponseModel: _userManagementResponseModel,
+            hasMoreData: (_userManagementResponseModel
+                        .data?.userData?.modifiedData?.length ??
+                    0) >=
+                10,
+            currentPage: page,
+          ));
         } else {
-          /// If it's a load more operation, emit UserManagementSuccessState with the new data
           emit(UserManagementSuccessState(
             userManagementResponseModel: _userManagementResponseModel,
             hasMoreData: (_userManagementResponseModel
@@ -119,5 +120,11 @@ class UserManagementBloc
         ),
       ));
     }
+  }
+
+  Future<void> userManagementSearchEvent(UserManagementSearchEvent event,
+      Emitter<UserManagementState> emit) async {
+    await _loadData(event.searchQuery, event.page, emit);
+    log("I am in Search");
   }
 }

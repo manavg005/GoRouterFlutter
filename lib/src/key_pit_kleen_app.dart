@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:keypitkleen_flutter_admin/src/provider_registration.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/routes/app_router_configuration.dart';
 import 'business_layer/helpers/device_info_helper.dart';
 import 'business_layer/helpers/log_helper.dart';
-import 'business_layer/routes/app_router_confi.dart';
 
 /// Navigator key is to get the current context, state and widget of the
 /// Material App
@@ -78,8 +78,8 @@ class _KeyPitKleenAppState extends State<KeyPitKleenApp>
     return MultiBlocProvider(
       providers: RegisterBloc.blocs(context),
       child: MaterialApp.router(
-        routerConfig: router,
-        title: 'KeyPit Kleen',
+        routerConfig: goRouter,
+        title: 'KeyPitKleen',
         debugShowCheckedModeBanner: false,
         onGenerateTitle: (context) => AppLocalizations.of(context)!.app_name,
         theme: ThemeData(
@@ -88,10 +88,6 @@ class _KeyPitKleenAppState extends State<KeyPitKleenApp>
         ),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        // navigatorKey: navigatorKey,
-        // home: widget.initialScreen,
-        // routeInformationParser: router.routeInformationParser,
-        // routerDelegate: router.routerDelegate,
       ),
     );
   }

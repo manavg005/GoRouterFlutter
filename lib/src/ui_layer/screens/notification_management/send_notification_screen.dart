@@ -13,6 +13,7 @@ import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text_field.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/base_widget.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_alerts.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_app_bar.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_dropdown_widget.dart';
 
 class SendNotificationScreen extends StatefulWidget {
@@ -38,7 +39,8 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseWidget(
+    return BaseWidgetWithAppBar(
+      appBar: CommonAppBar(),
       body: _buildBody(),
     );
   }
@@ -105,7 +107,7 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> {
                   controller: _messageController,
                   title: "Notification Message",
                   maxLength: 200,
-                  maxline: 5,
+                  maxline: 10,
                 ),
                 AppStyles.sbHeight10,
                 CommonDropdownWidget(

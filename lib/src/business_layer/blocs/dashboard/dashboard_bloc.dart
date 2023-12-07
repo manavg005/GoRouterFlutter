@@ -22,7 +22,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
   Future<FutureOr<void>> dashboardInitialEvent(
       DashboardInitialEvent event, Emitter<DashboardState> emit) async {
-    // emit(DashboardLoadingState());
+    emit(DashboardLoadingState());
 
     final BaseApiResponseModel response =
         await _dashboardRepository.homeManagement();

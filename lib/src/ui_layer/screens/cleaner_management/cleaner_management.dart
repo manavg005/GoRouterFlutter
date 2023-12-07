@@ -1,13 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/cleaner_management/cleaner_bloc.dart';
+import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/cleaner_management_response_model.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/colors.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/icons.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/styles.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text_field.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_app_bar.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/data_table.dart';
 
+import '../../../business_layer/helpers/date_time_helper.dart';
+import '../../../business_layer/helpers/enums.dart';
 import '../../widgets/base_widget.dart';
+import '../../widgets/common_switch.dart';
 
 class CleanerManagementScreen extends StatefulWidget {
   const CleanerManagementScreen({Key? key}) : super(key: key);
@@ -18,8 +25,16 @@ class CleanerManagementScreen extends StatefulWidget {
 }
 
 class _CleanerManagementScreenState extends State<CleanerManagementScreen> {
+  CleanerManagementBloc _bloc = CleanerManagementBloc();
   final TextEditingController _searchController = TextEditingController();
   bool isSelected = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _bloc.add(CleanerManagementInitialEvent());
+    super.initState();
+  }
 
   void toggleSwitch(bool value) {
     setState(() {
@@ -29,12 +44,30 @@ class _CleanerManagementScreenState extends State<CleanerManagementScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseWidget(
-      body: _buildBody(),
+    return BaseWidgetWithAppBar(
+      appBar: CommonAppBar(),
+      body: BlocBuilder<CleanerManagementBloc, CleanerManagementState>(
+        bloc: _bloc,
+        builder: (context, state) {
+          if (state is CleanerManagementLoadingState) {
+            return const Center(
+              child: LinearProgressIndicator(),
+            );
+          } else if (state is CleanerManagementSuccessState) {
+            return _buildBody(context, state.cleanerManagementResponseModel,
+                state.currentPage);
+          } else {
+            return SizedBox();
+          }
+        },
+      ),
     );
   }
 
-  Padding _buildBody() {
+  Padding _buildBody(
+      BuildContext context,
+      CleanerManagementResponseModel cleanerManagementResponseModel,
+      int currentPage) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 26.0, vertical: 22),
       child: SingleChildScrollView(
@@ -74,7 +107,7 @@ class _CleanerManagementScreenState extends State<CleanerManagementScreen> {
             AppStyles.sbHeight34,
             CommonDataTable(
               columns: _createColumns(),
-              rows: _createRows(),
+              rows: _createRows(cleanerManagementResponseModel, currentPage),
             ),
           ],
         ),
@@ -103,29 +136,34 @@ class _CleanerManagementScreenState extends State<CleanerManagementScreen> {
     ];
   }
 
-  List<DataRow> _createRows() {
+  List<DataRow> _createRows(
+      CleanerManagementResponseModel cleanerManagementResponseModel,
+      int currentPage) {
     List<DataRow> dataRow = [];
-    for (int i = 0; i < 10; i++) {
-      dataRow.add(DataRow(cells: [
-        DataCell(Text("1")),
+    List<ModifiedData>? data =
+        cleanerManagementResponseModel.data?.userData?.modifiedData;
+    for (int i = 0; i < data!.length; i++) {
+      int itemCount = (currentPage - 1) * 10 + i + 1;
+      DateTime dt = DateTime.parse(data[i].createdAt ?? "");
+      DataRow dataRowObject = DataRow(cells: [
+        DataCell(Text("$itemCount")),
         DataCell(Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             // SizedBox(child: Image.asset("assets/images/app_logo.png")),
-            Text("ABC"),
+            Text("${data[i].fullName}"),
           ],
         )),
-        DataCell(Text("AVC@yopmail.com")),
-        DataCell(Text("123454532")),
-        DataCell(Text("22-10-2023")),
-        DataCell(
-          CupertinoSwitch(
-            value: isSelected, // Use the isSelected variable here
-            onChanged: toggleSwitch,
-            activeColor: AppColors.themeGreenColor,
-          ),
-        ),
-      ]));
+        DataCell(Text("${data[i].email}")),
+        DataCell(Text("${data[i].countryCode} ${data[i].phoneNumber}")),
+        DataCell(Text("${DateTimeHelper.getCustomDateFormat(dt)}")),
+        DataCell(CommonSwitch(
+          value: data[i].status == 2 ? true : false,
+          id: data[i].sId ?? "",
+          screenType: CommonSwitchScreen.cleaner,
+        )),
+      ]);
+      dataRow.add(dataRowObject);
     }
     return dataRow;
   }

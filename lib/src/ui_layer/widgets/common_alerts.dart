@@ -3,7 +3,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/colors.dart';
 
 class AlertHelper {
-  static Future<bool?> showToast(String message) {
+  static Future<bool?> showToast(
+    String message,
+  ) {
     return Fluttertoast.showToast(
         msg: message,
         toastLength: Toast.LENGTH_LONG,
@@ -11,7 +13,7 @@ class AlertHelper {
         timeInSecForIosWeb: 2,
         textColor: AppColors.whiteColor,
         webShowClose: true,
-        webBgColor: AppColors.linearGradient,
+        webBgColor: AppColors.blueLinearGradient,
         fontSize: 16.0);
   }
 }

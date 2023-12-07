@@ -7,6 +7,7 @@ import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text_field.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/base_widget.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_alert_dialog.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_app_bar.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/data_table.dart';
 
 class BookingManagementScreen extends StatefulWidget {
@@ -35,32 +36,37 @@ class _BookingManagementScreenState extends State<BookingManagementScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseWidget(
-      body: DefaultTabController(
-        length: 3,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 26.0, vertical: 22),
-          child: Scaffold(
-            backgroundColor: AppColors.whiteColor,
-            body: Column(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    topTextAndSearchField(),
-                    const PoppinsNormal500(
-                      text: "Booking Management",
-                      fontSize: 20,
-                    ),
-                    AppStyles.sbHeight34,
-                  ],
-                ),
-                _buildTabBar(),
-                Expanded(
-                  child: _buildTabBarView(),
-                ),
-              ],
-            ),
+    return BaseWidgetWithAppBar(
+      appBar: CommonAppBar(),
+      body: _buildBody(),
+    );
+  }
+
+  Widget _buildBody() {
+    return DefaultTabController(
+      length: 3,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 26.0, vertical: 22),
+        child: Scaffold(
+          backgroundColor: AppColors.whiteColor,
+          body: Column(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  topTextAndSearchField(),
+                  const PoppinsNormal500(
+                    text: "Booking Management",
+                    fontSize: 20,
+                  ),
+                  AppStyles.sbHeight34,
+                ],
+              ),
+              _buildTabBar(),
+              Expanded(
+                child: _buildTabBarView(),
+              ),
+            ],
           ),
         ),
       ),
@@ -140,18 +146,24 @@ class _BookingManagementScreenState extends State<BookingManagementScreen> {
   }
 
   Widget _buildAcceptedBookingTab() {
-    return SingleChildScrollView(
-        child: CommonDataTable(
-      columns: _createColumns(),
-      rows: _createRows(),
-    ));
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 22),
+      child: SingleChildScrollView(
+          child: CommonDataTable(
+        columns: _createColumns(),
+        rows: _createRows(),
+      )),
+    );
   }
 
   Widget _buildPastBookingTab() {
-    return SingleChildScrollView(
-      child: CommonDataTable(
-        columns: _createColumns(),
-        rows: _createRows(),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 22),
+      child: SingleChildScrollView(
+        child: CommonDataTable(
+          columns: _createColumns(),
+          rows: _createRows(),
+        ),
       ),
     );
   }

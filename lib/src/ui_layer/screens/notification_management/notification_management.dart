@@ -10,13 +10,17 @@ import 'package:keypitkleen_flutter_admin/src/data_layer/res/icons.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/styles.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text_field.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_app_bar.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/data_table.dart';
 
 import '../../widgets/base_widget.dart';
 
 class NotificationManagementScreen extends StatefulWidget {
-  const NotificationManagementScreen({Key? key}) : super(key: key);
+  const NotificationManagementScreen({Key? key, required this.detailsPath})
+      : super(key: key);
 
+  /// The path to the detail page
+  final String detailsPath;
   @override
   State<NotificationManagementScreen> createState() =>
       _NotificationManagementScreenState();
@@ -35,7 +39,8 @@ class _NotificationManagementScreenState
 
   @override
   Widget build(BuildContext context) {
-    return BaseWidget(
+    return BaseWidgetWithAppBar(
+      appBar: CommonAppBar(),
       body: BlocBuilder<NotificationBloc, NotificationState>(
         bloc: _bloc,
         builder: (context, state) {
@@ -75,7 +80,8 @@ class _NotificationManagementScreenState
                 Spacer(),
                 InkWell(
                     onTap: () {
-                      context.goNamed('change-password');
+                      context
+                          .go('/notification-management/send-new-notification');
                     },
                     child: AppIcons.addIcon),
                 CommonText(

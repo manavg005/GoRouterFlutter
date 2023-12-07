@@ -119,4 +119,38 @@ class UserStateHiveHelper {
     final Box<dynamic> encryptedBox = await _open();
     await encryptedBox.put(Boxes.userDetails, userDetails);
   }
+
+  ///
+  Future<void> setUserName(String? userName) async {
+    final Box<dynamic> encryptedBox = await _open();
+    await encryptedBox.put(Boxes.userName, userName);
+  }
+
+  Future<void> setUserEmail(String? userEmail) async {
+    final Box<dynamic> encryptedBox = await _open();
+    await encryptedBox.put(Boxes.userEmail, userEmail);
+  }
+  Future<void> setUserPhoneNo(String? userPhone) async {
+    final Box<dynamic> encryptedBox = await _open();
+    await encryptedBox.put(Boxes.userPhone, userPhone);
+  }
+
+  Future<String> getUserName() async {
+    final Box<dynamic> encryptedBox = await _open();
+    final userDetails =
+    await encryptedBox.get(Boxes.userName);
+    return userDetails;
+  }
+  Future<String> getUserEmail() async {
+    final Box<dynamic> encryptedBox = await _open();
+    final userDetails =
+    await encryptedBox.get(Boxes.userEmail);
+    return userDetails;
+  }
+  Future<String> getUserPhone() async {
+    final Box<dynamic> encryptedBox = await _open();
+    final userDetails =
+    await encryptedBox.get(Boxes.userPhone);
+    return userDetails;
+  }
 }

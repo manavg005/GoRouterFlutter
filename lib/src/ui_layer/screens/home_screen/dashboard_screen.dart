@@ -8,10 +8,12 @@ import 'package:keypitkleen_flutter_admin/src/data_layer/res/images.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/styles.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/base_widget.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_app_bar.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/popup_menu.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -29,6 +31,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return BaseWidgetWithAppBar(
+      appBar: CommonAppBar(),
       body: BlocBuilder<DashboardBloc, DashboardState>(
         bloc: _dashboardBloc,
         builder: (context, state) {

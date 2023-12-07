@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/colors.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/routes/route_names.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/styles.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_buttons.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text_field.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/base_widget.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_app_bar.dart';
 
 import '../../../business_layer/utils/helper/validator.dart';
 import '../../../data_layer/res/icons.dart';
-import '../../../data_layer/res/numbers.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -28,13 +29,50 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseWidget(
-      body: body(context),
+    return BaseWidgetWithAppBar(
+      appBar: CommonAppBar(),
+      body: _buildBody(),
       backgroundColor: AppColors.backgroundColor,
     );
   }
 
-  Widget body(BuildContext context) {
+  Padding _buildBody() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 26.0, vertical: 22),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Row(
+                  children: [
+                    InkWell(
+                        onTap: () => context.goNamed(RouteNames.dashboard),
+                        child: const PoppinsLight400(
+                            text: "Dashboard", fontSize: 12)),
+                    AppIcons.arrowRight,
+                    const PoppinsLight400(
+                        text: "Change Password", fontSize: 12),
+                  ],
+                ),
+                AppStyles.sbWidth32,
+              ],
+            ),
+            AppStyles.sbHeight20,
+            const PoppinsNormal500(
+              text: "Change Password",
+              fontSize: 20,
+            ),
+            AppStyles.sbHeight34,
+            _changePasswordContainer(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _changePasswordContainer(BuildContext context) {
     return Center(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 52, vertical: 19),
@@ -123,7 +161,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               },
             ),
             AppStyles.sbHeight34,
-            PoppinsLight400(
+            const PoppinsLight400(
               text:
                   "* Password should contain min. 8 letter, uses uppercase and lowercase letters, numbers and special symbols.",
               fontSize: 12,
@@ -132,15 +170,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             AppStyles.sbHeight30,
             _saveButton(),
             AppStyles.sbHeight19,
-            GestureDetector(
-              onTap: () => context.go('/dashboard'),
-              child: Text(
-                "Cancel",
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                ),
-              ),
-            )
+            InkWell(
+                onTap: () => context.pushNamed(RouteNames.dashboard),
+                child: const PoppinsNormal500(
+                  text: "Cancel",
+                  fontSize: 14,
+                  textDecoration: TextDecoration.underline,
+                ))
           ],
         ),
       ),

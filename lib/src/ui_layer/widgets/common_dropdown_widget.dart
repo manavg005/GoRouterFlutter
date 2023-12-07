@@ -47,11 +47,9 @@ class _CommonDropdownWidgetState extends State<CommonDropdownWidget> {
   }
 
   Widget _header(BuildContext context) {
-    return CommonText(
+    return PoppinsNormal500(
       text: widget.headerText,
-      fontWeight: FontWeight.normal,
       fontSize: 14,
-      color: AppColors.blackColor,
     );
   }
 
@@ -84,10 +82,9 @@ class _CommonDropdownWidgetState extends State<CommonDropdownWidget> {
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 10),
-              child: CommonText(
+              child: PoppinsNormal500(
                 text: selectedValue ?? "Select",
-                fontWeight: FontWeight.normal,
-                fontSize: AppStyles.getFontSize(16),
+                fontSize: 12,
                 color: selectedValue != null
                     ? AppColors.blackColor
                     : AppColors.lightGray,
@@ -146,13 +143,9 @@ class _CommonDropdownWidgetState extends State<CommonDropdownWidget> {
       },
       child: Container(
         padding: const EdgeInsets.only(top: 5),
-        child: Text(
-          widget.dropDownItems[index],
-          style: TextStyle(
-            color: AppColors.mainColor,
-            fontSize: AppStyles.getFontSize(16),
-            fontWeight: FontWeight.w400,
-          ),
+        child: PoppinsNormal500(
+          text: widget.dropDownItems[index],
+          fontSize: 12,
         ),
       ),
     );

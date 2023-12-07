@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/login_bloc/login_bloc.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/device_info_helper.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/routes/login_info.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/utils/helper/validator.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/local_db/user_state_hive_helper.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/request/login_request_model.dart';
@@ -56,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // buildWhen: (previous, current) => current is! LoginActionState,
       listener: (context, state) {
         if (state is LoginNavigateToHomeActionState) {
-          context.go("/dashboard");
+          context.goNamed("dashboard");
         } else if (state is LoginNavigateToForgetPasswordActionState) {
           context.go("/forgot-password");
         } else {
@@ -74,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Expanded(
               flex: 4,
               child: _imageContainer(),
-            )
+            ),
         ],
       ),
       // switch (state.runtimeType) {
@@ -271,17 +272,19 @@ class _LoginScreenState extends State<LoginScreen> {
           return const Center(child: CircularProgressIndicator());
         } else {
           return AnimatedButton(
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                // loginBloc.add(LoginToHomeNavigateEvent());
-                loginBloc.add(LoginButtonClickedEvent(
-                    loginRequestModel: _getLoginRequestModel));
-                UserStateHiveHelper.instance.setIsUserLoggedIn(true);
-                AlertHelper.showToast("Logged In Successfully");
-                // loginBloc.loginToHomeNavigateEvent(LoginToHomeNavigateEvent() , )
-                // context.go("/dashboard");
-                // UserStateHiveHelper.instance.setIsUserLoggedIn(true);
-              }
+            onPressed: () async {
+              log("Logged IN Status==>>${await UserStateHiveHelper.instance.getIsUserLoggedIn()}");
+              // if (_formKey.currentState!.validate()) {
+              // loginBloc.add(LoginToHomeNavigateEvent());
+              loginBloc.add(LoginButtonClickedEvent(
+                  loginRequestModel: _getLoginRequestModel));
+              await UserStateHiveHelper.instance.setIsUserLoggedIn(true);
+              AlertHelper.showToast("Logged In Successfully");
+              // LoginInfo.instance.isLoggedIn = true;
+              // loginBloc.loginToHomeNavigateEvent(LoginToHomeNavigateEvent() , )
+              // context.go("/dashboard");
+              // UserStateHiveHelper.instance.setIsUserLoggedIn(true);
+              // }
             },
             title: "Sign in",
             width: DeviceInfo.width,
@@ -301,8 +304,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   /// Login Request
   LoginRequestModel get _getLoginRequestModel => LoginRequestModel(
-      email: _emailController.text,
-      password: _passwordController.text,
+      email: "admin@yopmail.com",
+      // email: _emailController.text,
+      // password: _passwordController.text,
+      password: "@Test123",
       deviceToken: "abcd",
       deviceId: "abcd",
       deviceType: "abcd");

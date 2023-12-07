@@ -56,11 +56,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       LogHelper.logData("response inside provider===> ${response.data}");
       LogHelper.logData(
           "_loginResponseModel inside provider===> ${_loginResponseModel.data!.toJson().toString()}");
-      await UserStateHiveHelper.instance.setUserDetails(
-          _loginResponseModel.data?.userdata!.userDetails!.firstName ??
-              "nothing");
+
       await UserStateHiveHelper.instance
           .setAccessToken(_loginResponseModel.data!.userdata!.token ?? "");
+      await UserStateHiveHelper.instance.setUserName(
+          "${_loginResponseModel.data?.userdata!.userDetails!.firstName} ${_loginResponseModel.data?.userdata!.userDetails!.lastName}" ??
+              "");
+      await UserStateHiveHelper.instance.setUserEmail(
+          _loginResponseModel.data?.userdata?.userDetails?.email ?? "");
+      await UserStateHiveHelper.instance.setUserPhoneNo(
+          _loginResponseModel.data?.userdata?.userDetails?.phoneNumber ?? "");
 
       emit(LoginNavigateToHomeActionState());
       emit(LoginSuccessState(loginResponse: _loginResponseModel));
