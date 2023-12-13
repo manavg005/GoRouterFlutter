@@ -118,6 +118,10 @@ class AppIcons {
     "/icons/add.svg",
   );
 
+  static Widget uploadIcon = SvgPicture.asset(
+    "/icons/upload-cloud.svg",
+  );
+
   static Widget arrowUpDropdown = SvgPicture.asset(
     "/icons/arrow-up.svg",
   );

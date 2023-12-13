@@ -15,7 +15,7 @@ class CleanerManagementSuccessState extends CleanerManagementInitial {
       {required this.cleanerManagementResponseModel,
       required this.hasMoreData,
       required this.currentPage});
-
+/*
   // Add copyWith method for convenient state modification
   CleanerManagementSuccessState copyWith({
     CleanerManagementResponseModel? cleanerManagementResponseModel,
@@ -28,7 +28,7 @@ class CleanerManagementSuccessState extends CleanerManagementInitial {
       hasMoreData: hasMoreData ?? this.hasMoreData,
       currentPage: currentPage ?? this.currentPage,
     );
-  }
+  }*/
 }
 
 class CleanerActiveInactiveState extends CleanerManagementInitial {}

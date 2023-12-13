@@ -32,9 +32,8 @@ class _NotificationManagementScreenState
 
   @override
   void initState() {
-    // TODO: implement initState
-    _bloc.add(NotificationInitialEvent());
     super.initState();
+    _bloc.add(NotificationInitialEvent());
   }
 
   @override
@@ -45,7 +44,7 @@ class _NotificationManagementScreenState
         bloc: _bloc,
         builder: (context, state) {
           if (state is NotificationLoadingState) {
-            return LinearProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           } else if (state is NotificationSuccessState) {
             return _buildBody(context,
                 state.notificationManagementResponseModel, state.currentPage);

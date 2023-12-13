@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/icons.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/images.dart';
@@ -7,6 +6,7 @@ import 'package:keypitkleen_flutter_admin/src/data_layer/res/styles.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text.dart';
 
 import '../../business_layer/helpers/enums.dart';
+import '../../data_layer/models/response/booking_management_response.dart';
 import '../../data_layer/res/colors.dart';
 
 class CustomLogoutDialog extends StatelessWidget {
@@ -106,12 +106,16 @@ class CustomLogoutDialog extends StatelessWidget {
 
 class CustomDetailsDialog extends StatelessWidget {
   const CustomDetailsDialog({
-    super.key,
+    Key? key,
     required this.bookingType,
     required this.progressStatus,
-  });
+    required this.id,
+    required this.details,
+  }) : super(key: key);
   final MyBookingTab bookingType;
   final BookingProgressStatus progressStatus;
+  final String id;
+  final ModifiedData details;
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +124,7 @@ class CustomDetailsDialog extends StatelessWidget {
       backgroundColor: Colors.white,
       content: Builder(
         builder: (context) {
-          var height = MediaQuery.of(context).size.height;
+          // var height = MediaQuery.of(context).size.height;
           var width = MediaQuery.of(context).size.width;
           Color statusColor = (bookingType == MyBookingTab.newBooking)
               ? AppColors.newBookingTextColor
@@ -134,7 +138,7 @@ class CustomDetailsDialog extends StatelessWidget {
                   : "Completed";
 
           return SingleChildScrollView(
-            child: Container(
+            child: SizedBox(
               width: width - 700,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,8 +150,9 @@ class CustomDetailsDialog extends StatelessWidget {
                         fontSize: 20,
                       ),
                       const Spacer(),
-                      const PoppinsSemiBold600(
-                        text: "Booking ID: 110029554",
+                      PoppinsSemiBold600(
+                        text:
+                            "Booking ID: ${(details.sId!.substring(details.sId!.length - 10)).toUpperCase()}",
                         fontSize: 12,
                         color: AppColors.bookingIdGreen,
                       ),
@@ -162,7 +167,7 @@ class CustomDetailsDialog extends StatelessWidget {
                   CommonRichTextDouble(
                     text1: "Status: ",
                     text2: statusText,
-                    style1: TextStyle(
+                    style1: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     ),
@@ -190,24 +195,25 @@ class CustomDetailsDialog extends StatelessWidget {
                             child: AppImages.welcomeImage,
                           ),
                         ),
+                        AppStyles.sbWidth5,
                         Expanded(
                           child: CommonTwoColumnText(
                             headingText: "Customer Name",
-                            subText: "Christine Wallace",
+                            subText: details.customer ?? "",
                             subColor: AppColors.whiteColor,
                           ),
                         ),
                         Expanded(
                           child: CommonTwoColumnText(
                             headingText: "Email",
-                            subText: "abc@gmail.com",
+                            subText: details.email ?? "",
                             subColor: AppColors.whiteColor,
                           ),
                         ),
                         Expanded(
                           child: CommonTwoColumnText(
                             headingText: "Phone Number",
-                            subText: "8899776655",
+                            subText: details.phoneNumber ?? "",
                             subColor: AppColors.whiteColor,
                           ),
                         ),
@@ -222,21 +228,26 @@ class CustomDetailsDialog extends StatelessWidget {
                     height: 24,
                   ),
                   AppStyles.sbHeight15,
-                  const CommonTwoColumnText(
+                  CommonTwoColumnText(
                     headingText: "Street Address",
                     subText:
-                        "Lorem Ipsum  Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "${details.serviceAddress?.addressLine1} ${details.serviceAddress?.addressLine2} ",
                   ),
                   AppStyles.sbHeight14,
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CommonTwoColumnText(headingText: "Unit", subText: "--"),
-                      CommonTwoColumnText(headingText: "City", subText: "--"),
+                      const CommonTwoColumnText(
+                          headingText: "Unit", subText: "--"),
                       CommonTwoColumnText(
-                          headingText: "Postal Code", subText: "L3A 4G5"),
+                          headingText: "City",
+                          subText: details.serviceAddress!.city ?? ""),
                       CommonTwoColumnText(
-                          headingText: "Province", subText: "Alberta"),
+                          headingText: "Postal Code",
+                          subText: details.serviceAddress!.zipCode ?? ""),
+                      CommonTwoColumnText(
+                          headingText: "Province",
+                          subText: details.serviceAddress!.state ?? ""),
                     ],
                   ),
                   const Divider(),
@@ -246,21 +257,27 @@ class CustomDetailsDialog extends StatelessWidget {
                     height: 24,
                   ),
                   AppStyles.sbHeight15,
-                  const CommonTwoColumnText(
+                  CommonTwoColumnText(
                     headingText: "Property Type",
-                    subText: "Air BnB",
+                    subText: details.propertyType!.name ?? "",
                   ),
                   AppStyles.sbHeight14,
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CommonTwoColumnText(headingText: "Floor", subText: "1"),
-                      CommonTwoColumnText(headingText: "Bedroom", subText: "2"),
                       CommonTwoColumnText(
-                          headingText: "Bathroom", subText: "1"),
+                          headingText: "Floor",
+                          subText: "${details.noOfFloor}"),
+                      CommonTwoColumnText(
+                          headingText: "Bedroom",
+                          subText: details.bedrooms!.name!.split(" ")[0]),
+                      CommonTwoColumnText(
+                          headingText: "Bathroom",
+                          subText: details.bathroom!.name!.split(" ")[0]),
                       CommonTwoColumnText(
                           headingText: "Total Area in sq feet.",
-                          subText: "1000-2000"),
+                          subText:
+                              details.totalSquareFeet!.name!.split(" ")[0]),
                     ],
                   ),
                   const Divider(),
@@ -273,13 +290,13 @@ class CustomDetailsDialog extends StatelessWidget {
                             CommonTwoColumnText(
                                 headingText:
                                     "When was your last full cleaning?",
-                                subText: "< 1 Month"),
+                                subText: details.lastCleaning!.name!),
                             CommonTwoColumnText(
                                 headingText: "Do you have any pets?",
-                                subText: "Yes"),
+                                subText: details.pets!.name!),
                             CommonTwoColumnText(
                                 headingText: "How often you want us to clean ",
-                                subText: "One Time"),
+                                subText: details.oftenUsed!.name!),
                           ],
                         ),
                       ),
@@ -289,11 +306,11 @@ class CustomDetailsDialog extends StatelessWidget {
                           children: [
                             CommonTwoColumnText(
                                 headingText: "Cleaner Name",
-                                subText: "Christine"),
+                                subText: details.cleaner!),
                             CommonTwoColumnText(
                                 headingText: "Total Charges",
-                                subText: '\$ 257'),
-                            PoppinsNormal500(
+                                subText: '\$ ${details.amount}'),
+                            const PoppinsNormal500(
                               text: "Payment Status",
                               fontSize: 10,
                               height: 1,
@@ -305,7 +322,7 @@ class CustomDetailsDialog extends StatelessWidget {
                                   radius: 5),
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 68.0, vertical: 4.0),
-                              child: PoppinsSemiBold600(
+                              child: const PoppinsSemiBold600(
                                 text: "DONE",
                                 fontSize: 13,
                                 color: AppColors.whiteColor,

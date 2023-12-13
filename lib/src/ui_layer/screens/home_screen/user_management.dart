@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/user_management/user_management_bloc.dart';
@@ -10,6 +8,7 @@ import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/user_ma
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/colors.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/icons.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/styles.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_buttons.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text_field.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/base_widget.dart';
@@ -27,25 +26,22 @@ class UserManagementScreen extends StatefulWidget {
 class _UserManagementScreenState extends State<UserManagementScreen> {
   final UserManagementBloc _userManagementBloc = UserManagementBloc();
   final TextEditingController _searchController = TextEditingController();
-  bool isSelected = false;
   Timer? _debounce;
-  // int currentPage = 1;
 
   @override
   void initState() {
-    _userManagementBloc.add(UserManagementInitialEvent());
     super.initState();
+    _userManagementBloc.add(UserManagementInitialEvent());
   }
 
-  void toggleSwitch(bool value) {
-    setState(() {
-      isSelected = !isSelected;
-    });
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    log("Print _search Controller111${_searchController.text}111111");
     return BaseWidgetWithAppBar(
       appBar: CommonAppBar(),
       body: BlocBuilder<UserManagementBloc, UserManagementState>(
@@ -53,7 +49,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
         builder: (context, state) {
           if (state is UserManagementLoadingState) {
             return const Center(
-              child: LinearProgressIndicator(),
+              child: CircularProgressIndicator(),
             );
           } else if (state is UserManagementSuccessState) {
             return _buildBody(
@@ -66,10 +62,19 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     );
   }
 
-  Padding _buildBody(
+  Widget _buildBody(
       BuildContext context,
       UserManagementResponseModel userManagementResponseModel,
       int currentPage) {
+    int totalPages = 0;
+
+    if (userManagementResponseModel.data != null &&
+        userManagementResponseModel.data!.userData != null &&
+        userManagementResponseModel.data!.userData!.totalCount != null) {
+      int totalItems = userManagementResponseModel.data!.userData!.totalCount!;
+      int itemsPerPage = 10;
+      totalPages = (totalItems / itemsPerPage).ceil();
+    }
     return Padding(
       padding: const EdgeInsets.all(26.0),
       child: SingleChildScrollView(
@@ -104,6 +109,9 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
 
                     _debounce = Timer(const Duration(milliseconds: 500), () {
                       currentPage = 1;
+                      // _userManagementBloc.add(UserManagementInitialEvent(
+                      //     searchQuery: _searchController.text,
+                      //     page: currentPage));
                       _userManagementBloc.add(UserManagementSearchEvent(
                           _searchController.text, currentPage));
                     });
@@ -123,66 +131,27 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                IconButton(
+                CommonIconButton(
+                  icon: Icons.arrow_back,
                   onPressed: () {
                     int previousPage = currentPage - 1;
-                    if (currentPage > 1) {
-                      if (_searchController.text.isEmpty) {
-                        return _userManagementBloc
-                            .add(UserManagementLoadPreviousEvent());
-                      } else {
-                        return _userManagementBloc.add(
-                            UserManagementSearchEvent(
-                                _searchController.text, previousPage));
-                      }
-                    }
-                    // (currentPage > 1)
-                    //     ? _searchController.text.isEmpty:_userManagementBloc.add(
-                    //         UserManagementLoadPreviousEvent(),
-                    //       ):_userManagementBloc.add(UserManagementSearchEvent(
-                    //     _searchController.text, currentPage);
-                    // : SizedBox();
-                    // setState(() {});
+                    return _userManagementBloc.add(UserManagementSearchEvent(
+                        _searchController.text, previousPage));
                   },
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: (currentPage > 1) ? Colors.black : Colors.grey,
-                  ),
-                  isSelected: (currentPage > 1),
+                  isButtonEnabled: currentPage > 1,
                 ),
-                IconButton(
+                CommonIconButton(
+                  icon: Icons.arrow_forward,
                   onPressed: () {
-                    if (userManagementResponseModel.data != null &&
-                        userManagementResponseModel.data!.userData != null &&
-                        userManagementResponseModel
-                                .data!.userData!.totalCount !=
-                            null) {
-                      int totalItems = userManagementResponseModel
-                          .data!.userData!.totalCount!;
-                      int itemsPerPage = 10;
-                      int totalPages = (totalItems / itemsPerPage).ceil();
-                      int nextPage = currentPage + 1;
+                    int nextPage = currentPage + 1;
 
-                      if (nextPage <= totalPages) {
-                        // _userManagementBloc.add(UserManagementLoadMoreEvent());
-                        if (_searchController.text.isEmpty) {
-                          return _userManagementBloc
-                              .add(UserManagementLoadMoreEvent());
-                        } else {
-                          return _userManagementBloc.add(
-                              UserManagementSearchEvent(
-                                  _searchController.text, nextPage));
-                        }
-                      } else {
-                        // Last page reached, do not load more
-                        // You can show a message or handle it as needed
-                      }
+                    if (nextPage <= totalPages) {
+                      return _userManagementBloc.add(UserManagementSearchEvent(
+                          _searchController.text, nextPage));
                     }
                   },
-                  icon: const Icon(
-                    Icons.arrow_forward,
-                  ),
-                ),
+                  isButtonEnabled: (currentPage < totalPages),
+                )
               ],
             ),
           ],
@@ -249,6 +218,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
           value: data[i].status == 2 ? true : false,
           id: data[i].sId ?? "",
           screenType: CommonSwitchScreen.user,
+          bloc: _userManagementBloc,
         )),
       ]);
       dataRow.add(dataRowObject);

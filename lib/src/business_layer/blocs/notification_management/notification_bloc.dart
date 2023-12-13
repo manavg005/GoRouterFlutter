@@ -8,6 +8,7 @@ import 'package:keypitkleen_flutter_admin/src/data_layer/models/base/base_api_re
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/request/send_notification_request.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/notification_management_response.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/send_notification_response.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_alerts.dart';
 import 'package:meta/meta.dart';
 
 part 'notification_event.dart';
@@ -93,6 +94,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     if (response.data != null &&
         response.data is SendNotificationResponseModel) {
       _notiResponseModel = response.data;
+      AlertHelper.showToast(_notiResponseModel.msg!);
     } else {
       emit(NotificationErrorState(
           errorMessage: UtilHelper.instance

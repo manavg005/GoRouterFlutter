@@ -329,3 +329,29 @@ class CommonAppButton extends StatelessWidget {
     );
   }
 }
+
+class CommonIconButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onPressed;
+  final bool isButtonEnabled;
+
+  const CommonIconButton({
+    Key? key,
+    required this.icon,
+    required this.onPressed,
+    this.isButtonEnabled = true,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return isButtonEnabled
+        ? IconButton(
+            onPressed: onPressed,
+            icon: Icon(
+              icon,
+              color: isButtonEnabled ? Colors.black : Colors.grey,
+            ),
+          )
+        : SizedBox();
+  }
+}

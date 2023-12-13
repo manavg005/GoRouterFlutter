@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/repositories/dashboard_repository.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/base/base_api_response_model.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/user_active_inactive_response.dart';
@@ -25,8 +24,6 @@ class UserManagementBloc
 
   UserManagementBloc() : super(UserManagementInitial()) {
     on<UserManagementInitialEvent>(userManagementInitialEvent);
-    on<UserManagementLoadMoreEvent>(userManagementLoadMoreEvent);
-    on<UserManagementLoadPreviousEvent>(userManagementLoadPreviousEvent);
     on<UserActiveInactiveEvent>(userActiveInactiveEvent);
     on<UserManagementSearchEvent>(userManagementSearchEvent);
   }
@@ -34,23 +31,6 @@ class UserManagementBloc
   Future<void> userManagementInitialEvent(UserManagementInitialEvent event,
       Emitter<UserManagementState> emit) async {
     await _loadData("", 1, emit); // Load initial data
-  }
-
-  Future<void> userManagementLoadMoreEvent(UserManagementLoadMoreEvent event,
-      Emitter<UserManagementState> emit) async {
-    if (state is UserManagementSuccessState) {
-      final int nextPage = _currentPage + 1;
-      await _loadData("", nextPage, emit);
-    }
-  }
-
-  Future<void> userManagementLoadPreviousEvent(
-      UserManagementLoadPreviousEvent event,
-      Emitter<UserManagementState> emit) async {
-    if (state is UserManagementSuccessState) {
-      final int nextPage = _currentPage - 1;
-      await _loadData("", nextPage, emit);
-    }
   }
 
   Future<void> _loadData(
@@ -101,7 +81,7 @@ class UserManagementBloc
 
   Future<FutureOr<void>> userActiveInactiveEvent(
       UserActiveInactiveEvent event, Emitter<UserManagementState> emit) async {
-    emit(UserManagementLoadingState());
+    // emit(UserManagementLoadingState());
     log("In User Active");
     final BaseApiResponseModel response =
         await _dashboardRepository.userActiveInactive(event.userId);
@@ -109,7 +89,6 @@ class UserManagementBloc
         response.data is UserActiveInactiveResponseModel) {
       _activeInactiveResponseModel = response.data;
       if (_activeInactiveResponseModel.status!) {
-        emit(UserActiveInactiveState());
       } else {
         return _activeInactiveResponseModel.msg!;
       }

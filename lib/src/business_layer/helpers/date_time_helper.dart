@@ -110,6 +110,15 @@ class DateTimeHelper {
     return "$day-$month-$year";
   }
 
+  /// get date in format 06-12-2001
+  static String getCustomCalenderDateFormat(DateTime date) {
+    var day = DateFormat('dd').format(date);
+    var month = DateFormat('MM').format(date);
+    var year = DateFormat('yyyy').format(date);
+
+    return "$year-$month-$day";
+  }
+
   /// get time in format 12:00 PM
   static String getTime(DateTime date) {
     var formattedTime = DateFormat.jm().format(date); // 12:34 PM format

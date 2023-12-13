@@ -1,6 +1,10 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/payment_management_bloc.dart';
+import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/payment_management_response.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text_field.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/base_widget.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_app_bar.dart';
@@ -14,7 +18,7 @@ import '../../../business_layer/helpers/date_time_helper.dart';
 import '../../../data_layer/res/colors.dart';
 
 class PaymentManagementScreen extends StatefulWidget {
-  const PaymentManagementScreen({super.key});
+  const PaymentManagementScreen({Key? key}) : super(key: key);
 
   @override
   State<PaymentManagementScreen> createState() =>
@@ -22,20 +26,66 @@ class PaymentManagementScreen extends StatefulWidget {
 }
 
 class _PaymentManagementScreenState extends State<PaymentManagementScreen> {
-  final TextEditingController _dateController = TextEditingController();
+  final PaymentManagementBloc _bloc = PaymentManagementBloc();
+  final TextEditingController _searchController = TextEditingController();
   final TextEditingController _startDateController = TextEditingController();
   final TextEditingController _endDateController = TextEditingController();
-  String selectedPeriod = 'Monthly';
+
+  Timer? _debounce;
+  String selectedPeriod = 'yearly';
+
+  @override
+  void initState() {
+    super.initState();
+    _bloc.add(PaymentManagementInitialEvent());
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _startDateController.dispose();
+    _endDateController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BaseWidgetWithAppBar(
       appBar: CommonAppBar(),
-      body: _buildBody(),
+      body: BlocBuilder<PaymentManagementBloc, PaymentManagementState>(
+        bloc: _bloc,
+        builder: (context, state) {
+          if (state is PaymentManagementLoadingState) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is PaymentManagementSuccessState) {
+            return _buildBody(context, state.paymentManagementResponseModel,
+                state.currentPage);
+          } else {
+            return SizedBox();
+          }
+        },
+      ),
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(
+    BuildContext context,
+    PaymentManagementResponseModel paymentManagementResponseModel,
+    int currentPage,
+  ) {
+    int totalPages = 0;
+
+    if (paymentManagementResponseModel.data != null &&
+        paymentManagementResponseModel.data!.userData != null &&
+        paymentManagementResponseModel.data!.userData!.totalCount != null) {
+      int totalItems =
+          paymentManagementResponseModel.data!.userData!.totalCount!;
+      int itemsPerPage = 10;
+      totalPages = (totalItems / itemsPerPage).ceil();
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 26.0, vertical: 22),
       child: SingleChildScrollView(
@@ -49,12 +99,36 @@ class _PaymentManagementScreenState extends State<PaymentManagementScreen> {
               fontSize: 20,
             ),
             AppStyles.sbHeight34,
-            searchTextFields(),
+            searchTextFields(currentPage),
             AppStyles.sbWidth10,
             AppStyles.sbHeight34,
             CommonDataTable(
               columns: _createColumns(),
-              rows: _createRows(),
+              rows: _createRows(paymentManagementResponseModel, currentPage),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CommonIconButton(
+                  icon: Icons.arrow_back,
+                  onPressed: () {
+                    int previousPage = currentPage - 1;
+                    _handlePageNavigation(previousPage);
+                  },
+                  isButtonEnabled: currentPage > 1,
+                ),
+                CommonIconButton(
+                  icon: Icons.arrow_forward,
+                  onPressed: () {
+                    int nextPage = currentPage + 1;
+
+                    if (nextPage <= totalPages) {
+                      _handlePageNavigation(nextPage);
+                    }
+                  },
+                  isButtonEnabled: (currentPage < totalPages),
+                )
+              ],
             ),
           ],
         ),
@@ -62,7 +136,23 @@ class _PaymentManagementScreenState extends State<PaymentManagementScreen> {
     );
   }
 
-  Widget searchTextFields() {
+  Widget CommonIconButton({
+    required IconData icon,
+    required VoidCallback onPressed,
+    bool isButtonEnabled = true,
+  }) {
+    return isButtonEnabled
+        ? IconButton(
+            onPressed: onPressed,
+            icon: Icon(
+              icon,
+              color: isButtonEnabled ? Colors.black : Colors.grey,
+            ),
+          )
+        : SizedBox();
+  }
+
+  Widget searchTextFields(int currentPage) {
     return Row(
       children: [
         Expanded(
@@ -71,8 +161,9 @@ class _PaymentManagementScreenState extends State<PaymentManagementScreen> {
             hint: "Start Date",
             suffixIcon: AppIcons.calenderIcon,
             onSuffixTap: () {
-              _calendar(true);
+              _calendar(true, currentPage);
             },
+            onChanged: (p0) => log("Start Date==>>>>$p0"),
           ),
         ),
         AppStyles.sbWidth24,
@@ -87,7 +178,16 @@ class _PaymentManagementScreenState extends State<PaymentManagementScreen> {
             hint: "End Date",
             suffixIcon: AppIcons.calenderIcon,
             onSuffixTap: () {
-              _calendar(true);
+              _calendar(false, currentPage);
+            },
+            onChanged: (p0) {
+              _bloc.add(PaymentManagementSearchEvent(
+                searchQuery: _searchController.text,
+                page: currentPage,
+                monthlyYearly: "yearly",
+                startDate: _startDateController.text,
+                endDate: _endDateController.text,
+              ));
             },
           ),
         ),
@@ -110,13 +210,24 @@ class _PaymentManagementScreenState extends State<PaymentManagementScreen> {
                     selectedPeriod = newValue!;
                   });
                 },
-                items: <String>['Monthly', 'Yearly'].map((String value) {
+                items: <String>['yearly', 'monthly'].map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
+                    onTap: () {
+                      _bloc.add(PaymentManagementSearchEvent(
+                        searchQuery: _searchController.text,
+                        page: currentPage,
+                        monthlyYearly: value,
+                        startDate: _startDateController.text,
+                        endDate: _endDateController.text,
+                      ));
+                    },
                     child: Text(
                       value,
                       style: AppStyles.subtitleStyle(
-                          color: AppColors.textColor, fontSize: 12),
+                        color: AppColors.textColor,
+                        fontSize: 12,
+                      ),
                     ),
                   );
                 }).toList(),
@@ -124,25 +235,32 @@ class _PaymentManagementScreenState extends State<PaymentManagementScreen> {
             ),
           ),
         ),
-
-        /*Expanded(
-          child: CommonTextField(
-            controller: _dateController,
-            hint: "Monthly",
-            suffixIcon: AppIcons.arrowDown,
-          ),
-        ),*/
         AppStyles.sbWidth24,
         Expanded(
           child: SearchTextField(
-              controller: _dateController, hint: "Search by Name"),
+            controller: _searchController,
+            hint: "Search by Name",
+            onChanged: (query) {
+              if (_debounce?.isActive ?? false) _debounce?.cancel();
+
+              _debounce = Timer(Duration(milliseconds: 500), () {
+                currentPage = 1;
+                _bloc.add(PaymentManagementSearchEvent(
+                  searchQuery: _searchController.text,
+                  page: currentPage,
+                  monthlyYearly: selectedPeriod,
+                  startDate: _startDateController.text,
+                  endDate: _endDateController.text,
+                ));
+              });
+            },
+          ),
         ),
       ],
     );
   }
 
-  /// Calendar drop down
-  Future<void> _calendar(bool isStartDate) async {
+  Future<void> _calendar(bool isStartDate, int currentPage) async {
     final DateTime? picked = await showDatePicker(
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
@@ -151,10 +269,19 @@ class _PaymentManagementScreenState extends State<PaymentManagementScreen> {
     );
     if (picked != null) {
       if (isStartDate) {
-        _startDateController.text = DateTimeHelper.getCustomDateFormat(picked);
-        log("${_startDateController.text}");
+        _startDateController.text =
+            DateTimeHelper.getCustomCalenderDateFormat(picked);
+        log(_startDateController.text);
       } else {
-        _endDateController.text = DateTimeHelper.getCustomDateFormat(picked);
+        _endDateController.text =
+            DateTimeHelper.getCustomCalenderDateFormat(picked);
+        _bloc.add(PaymentManagementSearchEvent(
+          searchQuery: _searchController.text,
+          page: currentPage,
+          monthlyYearly: "yearly",
+          startDate: _startDateController.text,
+          endDate: _endDateController.text,
+        ));
       }
     }
   }
@@ -177,23 +304,61 @@ class _PaymentManagementScreenState extends State<PaymentManagementScreen> {
       const DataColumn(label: Text('Time')),
       const DataColumn(label: Text('Booking Id')),
       const DataColumn(label: Text('Amount')),
-      const DataColumn(label: Text('User Name')),
+      const DataColumn(
+        label: Expanded(
+          child: Text(
+            'User Name',
+            softWrap: true,
+          ),
+        ),
+      ),
     ];
   }
 
-  List<DataRow> _createRows() {
+  List<DataRow> _createRows(
+    PaymentManagementResponseModel paymentManagementResponseModel,
+    int currentPage,
+  ) {
     List<DataRow> dataRow = [];
-    for (int i = 0; i < 10; i++) {
-      dataRow.add(DataRow(cells: [
-        DataCell(Text("1")),
-        DataCell(Text("ABC12334")),
-        DataCell(Text("22-10-2023")),
-        DataCell(Text("12:00")),
-        DataCell(Text("123454532")),
-        DataCell(Text("200")),
-        DataCell(Text("test")),
+
+    List<ModifiedData>? data =
+        paymentManagementResponseModel.data?.userData?.modifiedData;
+
+    if (data == null || data.isEmpty) {
+      dataRow.add(const DataRow(cells: [
+        DataCell(Text("")),
+        DataCell(Text("")),
+        DataCell(Text("")),
+        DataCell(Center(child: Text('No data found'))),
+        DataCell(Text("")),
+        DataCell(Text("")),
+        DataCell(Text("")),
       ]));
+    } else {
+      for (int i = 0; i < data.length; i++) {
+        int itemCount = (currentPage - 1) * 10 + i + 1;
+        DateTime dt = DateTime.parse(data[i].createdAt ?? "");
+        dataRow.add(DataRow(cells: [
+          DataCell(Text("$itemCount")),
+          DataCell(Text("${data[i].paymentId}")),
+          DataCell(Text(DateTimeHelper.getCustomDateFormat(dt))),
+          DataCell(Text(DateTimeHelper.getTime(dt))),
+          DataCell(Text("${data[i].bookingId}")),
+          DataCell(Text("${data[i].amount}")),
+          DataCell(Text(data[i].customer ?? "")),
+        ]));
+      }
     }
     return dataRow;
+  }
+
+  void _handlePageNavigation(int page) {
+    _bloc.add(PaymentManagementSearchEvent(
+      searchQuery: _searchController.text,
+      page: page,
+      monthlyYearly: selectedPeriod,
+      startDate: _startDateController.text,
+      endDate: _endDateController.text,
+    ));
   }
 }

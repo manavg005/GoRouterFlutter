@@ -14,7 +14,6 @@ import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/popup_menu.dart';
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
-
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
@@ -37,7 +36,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         builder: (context, state) {
           if (state is DashboardLoadingState) {
             return Center(
-              child: LinearProgressIndicator(),
+              child: CircularProgressIndicator(),
             );
           } else if (state is DashboardSuccessState) {
             return _buildBody(context, state.homeManagementResponseModel);

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,8 +8,10 @@ import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/cleaner
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/colors.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/icons.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/styles.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_buttons.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text_field.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_alerts.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_app_bar.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/data_table.dart';
 
@@ -28,6 +32,7 @@ class _CleanerManagementScreenState extends State<CleanerManagementScreen> {
   CleanerManagementBloc _bloc = CleanerManagementBloc();
   final TextEditingController _searchController = TextEditingController();
   bool isSelected = false;
+  Timer? _debounce;
 
   @override
   void initState() {
@@ -51,23 +56,34 @@ class _CleanerManagementScreenState extends State<CleanerManagementScreen> {
         builder: (context, state) {
           if (state is CleanerManagementLoadingState) {
             return const Center(
-              child: LinearProgressIndicator(),
+              child: CircularProgressIndicator(),
             );
           } else if (state is CleanerManagementSuccessState) {
             return _buildBody(context, state.cleanerManagementResponseModel,
                 state.currentPage);
-          } else {
-            return SizedBox();
+          } else if (state is CleanerManagementErrorState) {
+            AlertHelper.showToast(state.errorMessage);
           }
+          return SizedBox();
         },
       ),
     );
   }
 
-  Padding _buildBody(
+  Widget _buildBody(
       BuildContext context,
       CleanerManagementResponseModel cleanerManagementResponseModel,
       int currentPage) {
+    int totalPages = 0;
+
+    if (cleanerManagementResponseModel.data != null &&
+        cleanerManagementResponseModel.data!.userData != null &&
+        cleanerManagementResponseModel.data!.userData!.totalCount != null) {
+      int totalItems =
+          cleanerManagementResponseModel.data!.userData!.totalCount!;
+      int itemsPerPage = 10;
+      totalPages = (totalItems / itemsPerPage).ceil();
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 26.0, vertical: 22),
       child: SingleChildScrollView(
@@ -92,12 +108,20 @@ class _CleanerManagementScreenState extends State<CleanerManagementScreen> {
                 ),
                 AppStyles.sbWidth32,
                 Expanded(
-                  child: CommonTextField(
-                    controller: _searchController,
-                    hint: "Search by Name",
-                    prefixIcon: AppIcons.searchIcon,
-                  ),
-                ),
+                    child: SearchTextField(
+                  controller: _searchController,
+                  hint: "Search by Name",
+                  prefixIcon: AppIcons.searchIcon,
+                  onChanged: (query) {
+                    if (_debounce?.isActive ?? false) _debounce?.cancel();
+
+                    _debounce = Timer(const Duration(milliseconds: 500), () {
+                      currentPage = 1;
+                      _bloc.add(CleanerManagementSearchEvent(
+                          _searchController.text, currentPage));
+                    });
+                  },
+                ))
               ],
             ),
             PoppinsNormal500(
@@ -109,6 +133,54 @@ class _CleanerManagementScreenState extends State<CleanerManagementScreen> {
               columns: _createColumns(),
               rows: _createRows(cleanerManagementResponseModel, currentPage),
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CommonIconButton(
+                  icon: Icons.arrow_back,
+                  onPressed: () {
+                    int previousPage = currentPage - 1;
+                    return _bloc.add(CleanerManagementSearchEvent(
+                        _searchController.text, previousPage));
+                  },
+                  isButtonEnabled: currentPage > 1,
+                ),
+                // IconButton(
+                //   onPressed: () {
+                //     int previousPage = currentPage - 1;
+                //     if (currentPage > 1) {
+                //       // if (_searchController.text.isEmpty) {
+                //       //   return _bloc.add(CleanerManagementLoadPreviousEvent());
+                //       // } else {
+                //       return _bloc.add(CleanerManagementSearchEvent(
+                //           _searchController.text, previousPage));
+                //       // }
+                //     }
+                //     // (currentPage > 1)
+                //     //     ? _searchController.text.isEmpty:_userManagementBloc.add(
+                //     //         UserManagementLoadPreviousEvent(),
+                //     //       ):_userManagementBloc.add(UserManagementSearchEvent(
+                //     //     _searchController.text, currentPage);
+                //     // : SizedBox();
+                //     // setState(() {});
+                //   },
+                //   icon: Icon(
+                //     Icons.arrow_back,
+                //     color: (currentPage > 1) ? Colors.black : Colors.grey,
+                //   ),
+                //   isSelected: (currentPage > 1),
+                // ),
+                CommonIconButton(
+                  icon: Icons.arrow_forward,
+                  onPressed: () {
+                    int nextPage = currentPage + 1;
+                    return _bloc.add(CleanerManagementSearchEvent(
+                        _searchController.text, nextPage));
+                  },
+                  isButtonEnabled: (currentPage < totalPages),
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -118,7 +190,7 @@ class _CleanerManagementScreenState extends State<CleanerManagementScreen> {
   List<DataColumn> _createColumns() {
     return [
       const DataColumn(label: PoppinsNormal500(text: 'S.No.', fontSize: 12)),
-      DataColumn(
+      const DataColumn(
           label: PoppinsNormal500(
               text: 'Profile Name.',
               fontSize: 12,
@@ -156,11 +228,12 @@ class _CleanerManagementScreenState extends State<CleanerManagementScreen> {
         )),
         DataCell(Text("${data[i].email}")),
         DataCell(Text("${data[i].countryCode} ${data[i].phoneNumber}")),
-        DataCell(Text("${DateTimeHelper.getCustomDateFormat(dt)}")),
+        DataCell(Text(DateTimeHelper.getCustomDateFormat(dt))),
         DataCell(CommonSwitch(
           value: data[i].status == 2 ? true : false,
           id: data[i].sId ?? "",
           screenType: CommonSwitchScreen.cleaner,
+          bloc: _bloc,
         )),
       ]);
       dataRow.add(dataRowObject);

@@ -15,23 +15,14 @@ class UserManagementSuccessState extends UserManagementInitial {
       {required this.userManagementResponseModel,
       required this.hasMoreData,
       required this.currentPage});
-
-  // Add copyWith method for convenient state modification
-  UserManagementSuccessState copyWith({
-    UserManagementResponseModel? userManagementResponseModel,
-    bool? hasMoreData,
-    int? currentPage,
-  }) {
-    return UserManagementSuccessState(
-      userManagementResponseModel:
-          userManagementResponseModel ?? this.userManagementResponseModel,
-      hasMoreData: hasMoreData ?? this.hasMoreData,
-      currentPage: currentPage ?? this.currentPage,
-    );
-  }
 }
 
-class UserActiveInactiveState extends UserManagementInitial {}
+class UserActiveInactiveState extends UserManagementInitial {
+  final int isActive;
+  final String userId;
+
+  UserActiveInactiveState({required this.userId, required this.isActive});
+}
 
 class UserManagementLoadingState extends UserManagementInitial {}
 

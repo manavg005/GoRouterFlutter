@@ -6,6 +6,7 @@ import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/log_helper.
 import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/util_helper.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/repositories/auth_repository.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/local_db/user_state_hive_helper.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_alerts.dart';
 
 import '../../../data_layer/models/base/base_api_response_model.dart';
 import '../../../data_layer/models/request/login_request_model.dart';
@@ -29,7 +30,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   Future<FutureOr<void>> loginInitialEvent(
       LoginInitialEvent event, Emitter<LoginState> emit) async {
-    emit(LoginLoadingState());
+    // emit(LoginLoadingState());
     await Future.delayed(const Duration(seconds: 1));
     // try {
     //   emit(LoginSuccessState());
@@ -48,6 +49,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   Future<void> loginButtonClickedEvent(
       LoginButtonClickedEvent event, Emitter<LoginState> emit) async {
+    print("dhsfjhvsdb");
     emit(LoginLoadingState());
     final BaseApiResponseModel response =
         await _registrationRepository.login(event.loginRequestModel);
@@ -68,6 +70,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           _loginResponseModel.data?.userdata?.userDetails?.phoneNumber ?? "");
 
       emit(LoginNavigateToHomeActionState());
+      AlertHelper.showToast(_loginResponseModel.msg ?? "");
       emit(LoginSuccessState(loginResponse: _loginResponseModel));
 
       log("inside login");

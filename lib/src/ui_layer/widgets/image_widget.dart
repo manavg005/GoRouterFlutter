@@ -15,7 +15,7 @@ class CommonNetworkImage extends StatefulWidget {
     this.errorWidget,
     this.errorIcon = Icons.error,
     this.errorIconColor = Colors.red,
-    this.errorIconSize = 50,
+    this.errorIconSize = 20,
     this.errorText = 'Cannot load image',
     this.retryButtonText = 'Retry',
     this.retryButtonOnPressed,
@@ -93,19 +93,19 @@ class _CommonNetworkImageState extends State<CommonNetworkImage> {
                     // Text(widget.errorText),
 
                     /// this is the retry button
-                    if (widget.showRetryButton)
-                      TextButton(
-                        onPressed: () {
-                          /// call the retry button callback
-                          widget.retryButtonOnPressed?.call();
-
-                          // Force reload image
-                          setState(() {});
-                        },
-
-                        /// this is the retry button text
-                        child: Text(widget.retryButtonText),
-                      ),
+                    // if (widget.showRetryButton)
+                    //   TextButton(
+                    //     onPressed: () {
+                    //       /// call the retry button callback
+                    //       widget.retryButtonOnPressed?.call();
+                    //
+                    //       // Force reload image
+                    //       setState(() {});
+                    //     },
+                    //
+                    //     /// this is the retry button text
+                    //     child: Text(widget.retryButtonText),
+                    //   ),
                   ],
                 )
             : Container();

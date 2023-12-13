@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/util_helper.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/repositories/dashboard_repository.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/base/base_api_response_model.dart';
+import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/cleaner_active_inactive_response.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/cleaner_management_response_model.dart';
 
 import 'cleaner_bloc.dart';
@@ -16,19 +18,23 @@ class CleanerManagementBloc
   final DashboardRepository _dashboardRepository = DashboardRepository();
   CleanerManagementResponseModel _cleanerManagementResponseModel =
       CleanerManagementResponseModel();
+  CleanerActiveInactiveResponseModel _activeInactiveResponseModel =
+      CleanerActiveInactiveResponseModel();
 
   int _currentPage = 1;
 
   CleanerManagementBloc() : super(CleanerManagementInitial()) {
     on<CleanerManagementInitialEvent>(cleanerManagementInitialEvent);
-    on<CleanerManagementLoadMoreEvent>(cleanerManagementLoadMoreEvent);
-    on<CleanerManagementLoadPreviousEvent>(cleanerManagementLoadPreviousEvent);
+    // on<CleanerManagementLoadMoreEvent>(cleanerManagementLoadMoreEvent);
+    // on<CleanerManagementLoadPreviousEvent>(cleanerManagementLoadPreviousEvent);
+    on<CleanerManagementSearchEvent>(cleanerManagementSearchEvent);
+    on<CleanerActiveInactiveEvent>(cleanerActiveInactiveEvent);
   }
 
   Future<void> cleanerManagementInitialEvent(
       CleanerManagementInitialEvent event,
       Emitter<CleanerManagementState> emit) async {
-    await _loadData(1, emit); // Load initial data
+    await _loadData("", 1, emit); // Load initial data
   }
 
   Future<void> cleanerManagementLoadMoreEvent(
@@ -36,7 +42,7 @@ class CleanerManagementBloc
       Emitter<CleanerManagementState> emit) async {
     if (state is CleanerManagementSuccessState) {
       final int nextPage = _currentPage + 1;
-      await _loadData(nextPage, emit);
+      await _loadData("", nextPage, emit);
     }
   }
 
@@ -45,15 +51,16 @@ class CleanerManagementBloc
       Emitter<CleanerManagementState> emit) async {
     if (state is CleanerManagementSuccessState) {
       final int nextPage = _currentPage - 1;
-      await _loadData(nextPage, emit);
+      await _loadData("", nextPage, emit);
     }
   }
 
-  Future<void> _loadData(int page, Emitter<CleanerManagementState> emit) async {
+  Future<void> _loadData(
+      String search, int page, Emitter<CleanerManagementState> emit) async {
     emit(CleanerManagementLoadingState());
 
     final BaseApiResponseModel response =
-        await _dashboardRepository.cleanerManagement(page);
+        await _dashboardRepository.cleanerManagement(search, page);
 
     if (response.data != null &&
         response.data is CleanerManagementResponseModel) {
@@ -86,6 +93,34 @@ class CleanerManagementBloc
         emit(CleanerManagementErrorState(
           errorMessage: _cleanerManagementResponseModel.msg!,
         ));
+      }
+    } else {
+      emit(CleanerManagementErrorState(
+        errorMessage: UtilHelper.instance.getExceptionMessage(
+          exceptionType: response.exceptionType,
+        ),
+      ));
+    }
+  }
+
+  Future<void> cleanerManagementSearchEvent(CleanerManagementSearchEvent event,
+      Emitter<CleanerManagementState> emit) async {
+    await _loadData(event.searchQuery, event.page, emit);
+    log("I am in Search");
+  }
+
+  Future<FutureOr<void>> cleanerActiveInactiveEvent(
+      CleanerActiveInactiveEvent event,
+      Emitter<CleanerManagementState> emit) async {
+    // emit(UserManagementLoadingState());
+    final BaseApiResponseModel response =
+        await _dashboardRepository.cleanerActiveInactive(event.userId);
+    if (response.data != null &&
+        response.data is CleanerActiveInactiveResponseModel) {
+      _activeInactiveResponseModel = response.data;
+      if (_activeInactiveResponseModel.status!) {
+      } else {
+        return _activeInactiveResponseModel.msg!;
       }
     } else {
       emit(CleanerManagementErrorState(

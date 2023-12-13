@@ -1,17 +1,16 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/local_db/user_state_hive_helper.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/routes/route_names.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/banner_management/add_banner_screen.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/banner_management/banner_management.dart';
-import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/home_screen/booking_management.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/booking_management/booking_management.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/home_screen/change_password_screen.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/cleaner_management/cleaner_management.dart';
-import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/home_screen/dashboard_screen.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/payment_management/dashboard_screen.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/home_screen/payment_management.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/home_screen/user_management.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/login_screen/forgot_password_screen.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/login_screen/login_screen.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/notification_management/notification_management.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/notification_management/send_notification_screen.dart';
@@ -22,13 +21,13 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorAKey = GlobalKey<NavigatorState>();
 
 final goRouter = GoRouter(
-  initialLocation: '/dashboard',
+  initialLocation: '/',
   navigatorKey: _rootNavigatorKey,
   debugLogDiagnostics: true,
   redirect: (context, state) async {
     final loggedIn = await UserStateHiveHelper.instance.getIsUserLoggedIn();
-    // final isLogging = state.path == '/login';
-    if (!loggedIn) {
+    final isForgot = state.matchedLocation == '/forgot';
+    if (!loggedIn && !isForgot) {
       return '/login';
     }
     return null;
@@ -42,11 +41,19 @@ final goRouter = GoRouter(
       },
       redirect: (context, state) async {
         final loggedIn = await UserStateHiveHelper.instance.getIsUserLoggedIn();
+        // final isForgot = state.name == 'forgot';
+        // log("$isForgot");
+        // log("${state.fullPath}");
         if (loggedIn) {
           return '/dashboard';
         }
         return null;
       },
+    ),
+    GoRoute(
+      path: '/forgot',
+      name: 'forgot',
+      builder: (context, state) => const ForgetPasswordScreen(),
     ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
@@ -57,12 +64,21 @@ final goRouter = GoRouter(
           navigatorKey: _shellNavigatorAKey,
           routes: [
             GoRoute(
-              path: '/dashboard',
+              path: '/',
               name: RouteNames.dashboard,
-              pageBuilder: (context, state) => const NoTransitionPage(
-                child: DashboardScreen(),
-              ),
+              redirect: (context, state) {
+                return '/dashboard';
+              },
+              // pageBuilder: (context, state) => const NoTransitionPage(
+              //   child: DashboardScreen(),
+              // ),
               routes: [
+                GoRoute(
+                  path: 'dashboard',
+                  builder: (context, state) {
+                    return const DashboardScreen();
+                  },
+                ),
                 GoRoute(
                   path: 'change-password',
                   name: RouteNames.changePasswordScreen,

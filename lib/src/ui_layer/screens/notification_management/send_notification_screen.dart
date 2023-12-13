@@ -107,6 +107,7 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> {
                   controller: _messageController,
                   title: "Notification Message",
                   maxLength: 200,
+                  minline: 10,
                   maxline: 10,
                 ),
                 AppStyles.sbHeight10,
@@ -130,7 +131,6 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> {
                       onPressed: () {
                         _bloc.add(SendNotificationEvent(
                             sendNotificationRequestModel: _sendRequestModel));
-                        AlertHelper.showToast("Notification Sent");
                       },
                       title: "Send",
                       titleTextStyle: TextStyle(color: AppColors.whiteColor),

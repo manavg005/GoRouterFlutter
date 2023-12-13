@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/banner_management/banner_bloc.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/dashboard/dashboard_bloc.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/notification_management/notification_bloc.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/user_management/user_management_bloc.dart';
-import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/home_screen/dashboard_screen.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/payment_management/dashboard_screen.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/home_screen/user_management.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/login_screen/login_screen.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/notification_management/notification_management.dart';
@@ -32,6 +33,9 @@ class RegisterBloc {
             detailsPath: '',
           ),
         ),
+        BlocProvider(
+          create: (context) => BannerBloc(),
+        )
         // ChangeNotifierProvider<BaseProvider>(
         //   create: (context) => BaseProvider(),
         // ),

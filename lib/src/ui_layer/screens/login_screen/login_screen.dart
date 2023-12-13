@@ -35,6 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _checkBoxValue = false;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -57,6 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // buildWhen: (previous, current) => current is! LoginActionState,
       listener: (context, state) {
         if (state is LoginNavigateToHomeActionState) {
+          _isLoading = false;
           context.goNamed("dashboard");
         } else if (state is LoginNavigateToForgetPasswordActionState) {
           context.go("/forgot-password");
@@ -241,7 +243,7 @@ class _LoginScreenState extends State<LoginScreen> {
       alignment: Alignment.topRight,
       child: GestureDetector(
         onTap: () {
-          context.goNamed("forgot-password");
+          context.goNamed("forgot");
         },
         child: const Text(
           "Forgot Password?",
@@ -267,11 +269,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _loginButton() {
     return BlocBuilder<LoginBloc, LoginState>(
-      builder: (context, state) {
-        if (state is LoginLoadingState) {
-          return const Center(child: CircularProgressIndicator());
-        } else {
+        bloc: loginBloc,
+        builder: (context, state) {
+          // if (state is LoginLoadingState) {
+          //   return const Center(child: CircularProgressIndicator());
+          // } else {
+          print("state==>> $state");
           return AnimatedButton(
+            loading: state is LoginLoadingState ? true : false,
             onPressed: () async {
               log("Logged IN Status==>>${await UserStateHiveHelper.instance.getIsUserLoggedIn()}");
               // if (_formKey.currentState!.validate()) {
@@ -279,12 +284,6 @@ class _LoginScreenState extends State<LoginScreen> {
               loginBloc.add(LoginButtonClickedEvent(
                   loginRequestModel: _getLoginRequestModel));
               await UserStateHiveHelper.instance.setIsUserLoggedIn(true);
-              AlertHelper.showToast("Logged In Successfully");
-              // LoginInfo.instance.isLoggedIn = true;
-              // loginBloc.loginToHomeNavigateEvent(LoginToHomeNavigateEvent() , )
-              // context.go("/dashboard");
-              // UserStateHiveHelper.instance.setIsUserLoggedIn(true);
-              // }
             },
             title: "Sign in",
             width: DeviceInfo.width,
@@ -298,8 +297,8 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           );
         }
-      },
-    );
+        // },
+        );
   }
 
   /// Login Request

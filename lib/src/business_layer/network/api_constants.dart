@@ -25,11 +25,21 @@ class ApiConstants {
   static const String cleanerManagement = "admin/cleaner-management";
   static const String bookingManagement = "admin/booking-management";
   static const String notificationManagement = "admin/list-notification";
+  static const String bannerManagement = "admin/banner-management";
   static const String paymentManagement = "admin/payment-management";
   static const String sendNotification = "admin/create-notification";
+  static const String addBanner = "admin/create-banner";
 
   static String userActiveInactive(String? userId) {
     return "admin/active-inactive-user/$userId";
+  }
+
+  static String cleanerActiveInactive(String? cleanerId) {
+    return "admin/active-inactive-cleaner/$cleanerId";
+  }
+
+  static String bannerActiveInactive(String? bannerId) {
+    return "admin/active-inactive-banner/$bannerId";
   }
 
   /// passwords

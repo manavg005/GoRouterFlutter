@@ -10,8 +10,15 @@ class CleanerManagementLoadMoreEvent extends CleanerManagementEvent {}
 
 class CleanerManagementLoadPreviousEvent extends CleanerManagementEvent {}
 
-class UserActiveInactiveEvent extends CleanerManagementEvent {
+class CleanerActiveInactiveEvent extends CleanerManagementEvent {
   final String userId;
 
-  UserActiveInactiveEvent(this.userId);
+  CleanerActiveInactiveEvent({required this.userId});
+}
+
+class CleanerManagementSearchEvent extends CleanerManagementEvent {
+  final String searchQuery;
+  final int page;
+
+  CleanerManagementSearchEvent(this.searchQuery, this.page);
 }

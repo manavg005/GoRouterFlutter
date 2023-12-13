@@ -1,13 +1,13 @@
-class PaymentManagementResponseModel {
+class BannerManagementResponseModel {
   bool? status;
   int? statusCode;
   String? msg;
   Data? data;
 
-  PaymentManagementResponseModel(
+  BannerManagementResponseModel(
       {this.status, this.statusCode, this.msg, this.data});
 
-  PaymentManagementResponseModel.fromJson(Map<String, dynamic> json) {
+  BannerManagementResponseModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     statusCode = json['statusCode'];
     msg = json['msg'];
@@ -27,30 +27,31 @@ class PaymentManagementResponseModel {
 }
 
 class Data {
-  UserData? userData;
+  BannerData? bannerData;
 
-  Data({this.userData});
+  Data({this.bannerData});
 
   Data.fromJson(Map<String, dynamic> json) {
-    userData = json['data'] != null ? UserData.fromJson(json['data']) : null;
+    bannerData =
+        json['data'] != null ? BannerData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (userData != null) {
-      data['data'] = userData!.toJson();
+    if (this.bannerData != null) {
+      data['data'] = this.bannerData!.toJson();
     }
     return data;
   }
 }
 
-class UserData {
+class BannerData {
   int? totalCount;
   List<ModifiedData>? modifiedData;
 
-  UserData({this.totalCount, this.modifiedData});
+  BannerData({this.totalCount, this.modifiedData});
 
-  UserData.fromJson(Map<String, dynamic> json) {
+  BannerData.fromJson(Map<String, dynamic> json) {
     totalCount = json['totalCount'];
     if (json['modifiedData'] != null) {
       modifiedData = <ModifiedData>[];
@@ -72,41 +73,29 @@ class UserData {
 
 class ModifiedData {
   String? sId;
-  String? bookingId;
-  int? amount;
-  String? paymentId;
+  String? name;
+  String? imageUrl;
   int? status;
   String? createdAt;
-  String? customer;
 
   ModifiedData(
-      {this.sId,
-      this.bookingId,
-      this.amount,
-      this.paymentId,
-      this.status,
-      this.createdAt,
-      this.customer});
+      {this.sId, this.name, this.imageUrl, this.status, this.createdAt});
 
   ModifiedData.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
-    bookingId = json['bookingId'];
-    amount = json['amount'];
-    paymentId = json['paymentId'];
+    name = json['name'];
+    imageUrl = json['imageUrl'];
     status = json['status'];
     createdAt = json['createdAt'];
-    customer = json['customer'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['_id'] = sId;
-    data['bookingId'] = bookingId;
-    data['amount'] = amount;
-    data['paymentId'] = paymentId;
+    data['name'] = name;
+    data['imageUrl'] = imageUrl;
     data['status'] = status;
     data['createdAt'] = createdAt;
-    data['customer'] = customer;
     return data;
   }
 }
