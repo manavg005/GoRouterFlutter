@@ -12,10 +12,10 @@ class SendNotificationRequestModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['target'] = this.target;
-    data['title'] = this.title;
-    data['message'] = this.message;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['target'] = target;
+    data['title'] = title;
+    data['message'] = message;
     return data;
   }
 }

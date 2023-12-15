@@ -14,8 +14,7 @@ import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/base_widget.dart'
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_alert_dialog.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_app_bar.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/data_table.dart';
-
-import '../../widgets/app_buttons.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_buttons.dart';
 
 class BookingManagementScreen extends StatefulWidget {
   const BookingManagementScreen({Key? key}) : super(key: key);
@@ -91,6 +90,7 @@ class _BookingManagementScreenState extends State<BookingManagementScreen> {
       BookingManagementResponseModel bookingManagementResponseModel,
       int currentPage) {
     return TabBarView(
+      physics: const NeverScrollableScrollPhysics(),
       children: [
         _buildBookingTab(MyBookingTab.newBooking,
             bookingManagementResponseModel, currentPage),
@@ -131,12 +131,8 @@ class _BookingManagementScreenState extends State<BookingManagementScreen> {
                 right: 3,
                 bottom: 5,
                 child: Container(
-                  padding: EdgeInsets.all(2),
-                  /*decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white, // Adjust color as needed
-                  ),*/
-                  child: Text(
+                  padding: const EdgeInsets.all(2),
+                  child: const Text(
                     '40+', // Replace with the actual count
                     style: TextStyle(
                       color: Colors.white, // Adjust color as needed
@@ -162,7 +158,7 @@ class _BookingManagementScreenState extends State<BookingManagementScreen> {
     return Row(
       children: [
         topNavigationRouteText(),
-        Spacer(),
+        const Spacer(),
         InkWell(onTap: () {}, child: AppIcons.downloadIcon),
         const CommonText(
           text: "Download",
@@ -194,9 +190,9 @@ class _BookingManagementScreenState extends State<BookingManagementScreen> {
   Widget topNavigationRouteText() {
     return Row(
       children: [
-        PoppinsLight400(text: "Dashboard", fontSize: 12),
+        const PoppinsLight400(text: "Dashboard", fontSize: 12),
         AppIcons.arrowRight,
-        PoppinsLight400(text: "Booking Management", fontSize: 12),
+        const PoppinsLight400(text: "Booking Management", fontSize: 12),
       ],
     );
   }

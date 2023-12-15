@@ -1,7 +1,11 @@
+// ignore_for_file: avoid_web_libraries_in_flutter
+
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/user_management/user_management_bloc.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/csv_export_helper.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/date_time_helper.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/enums.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/user_management_response.dart';
@@ -66,6 +70,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
       BuildContext context,
       UserManagementResponseModel userManagementResponseModel,
       int currentPage) {
+    /// pagination
     int totalPages = 0;
 
     if (userManagementResponseModel.data != null &&
@@ -92,7 +97,34 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                   ],
                 ),
                 const Spacer(),
-                InkWell(onTap: () {}, child: AppIcons.downloadIcon),
+                InkWell(
+                    onTap: () {
+                      List<ModifiedData>? data = userManagementResponseModel
+                          .data?.userData?.modifiedData;
+                      List<List<dynamic>> exportData = [
+                        [
+                          'S.No.',
+                          'Profile Name',
+                          'Email',
+                          'Mobile No.',
+                          'Date Registered',
+                          'Action'
+                        ],
+                        for (int i = 0; i < data!.length; i++)
+                          [
+                            i + 1,
+                            data[i].fullName,
+                            data[i].email,
+                            '${data[i].countryCode} ${data[i].phoneNumber}',
+                            DateTimeHelper.getCustomDateFormat(
+                                DateTime.parse(data[i].createdAt ?? "")),
+                            data[i].status == 2 ? 'Active' : 'Inactive',
+                          ],
+                      ];
+
+                      CsvHelper.exportToCSV(exportData, 'user_management_data');
+                    },
+                    child: AppIcons.downloadIcon),
                 const CommonText(
                   text: "Download",
                   color: AppColors.iconBlue,

@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/cleaner_management/cleaner_bloc.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/csv_export_helper.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/dialog_util.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/cleaner_management_response_model.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/colors.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/icons.dart';
@@ -11,14 +13,12 @@ import 'package:keypitkleen_flutter_admin/src/data_layer/res/styles.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_buttons.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text_field.dart';
-import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_alerts.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_app_bar.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/data_table.dart';
-
-import '../../../business_layer/helpers/date_time_helper.dart';
-import '../../../business_layer/helpers/enums.dart';
-import '../../widgets/base_widget.dart';
-import '../../widgets/common_switch.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/date_time_helper.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/enums.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/base_widget.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_switch.dart';
 
 class CleanerManagementScreen extends StatefulWidget {
   const CleanerManagementScreen({Key? key}) : super(key: key);
@@ -62,9 +62,9 @@ class _CleanerManagementScreenState extends State<CleanerManagementScreen> {
             return _buildBody(context, state.cleanerManagementResponseModel,
                 state.currentPage);
           } else if (state is CleanerManagementErrorState) {
-            AlertHelper.showToast(state.errorMessage);
+            DialogUtil.showToast(state.errorMessage);
           }
-          return SizedBox();
+          return const SizedBox();
         },
       ),
     );
@@ -94,14 +94,43 @@ class _CleanerManagementScreenState extends State<CleanerManagementScreen> {
               children: [
                 Row(
                   children: [
-                    PoppinsLight400(text: "Dashboard", fontSize: 12),
+                    const PoppinsLight400(text: "Dashboard", fontSize: 12),
                     AppIcons.arrowRight,
-                    PoppinsLight400(text: "Cleaner Management", fontSize: 12),
+                    const PoppinsLight400(
+                        text: "Cleaner Management", fontSize: 12),
                   ],
                 ),
-                Spacer(),
-                InkWell(onTap: () {}, child: AppIcons.downloadIcon),
-                CommonText(
+                const Spacer(),
+                InkWell(
+                    onTap: () {
+                      List<ModifiedData>? data = cleanerManagementResponseModel
+                          .data?.userData?.modifiedData;
+                      List<List<dynamic>> exportData = [
+                        [
+                          'S.No.',
+                          'Profile Name',
+                          'Email',
+                          'Mobile No.',
+                          'Date Registered',
+                          'Action'
+                        ],
+                        for (int i = 0; i < data!.length; i++)
+                          [
+                            i + 1,
+                            data[i].fullName,
+                            data[i].email,
+                            '${data[i].countryCode} ${data[i].phoneNumber}',
+                            DateTimeHelper.getCustomDateFormat(
+                                DateTime.parse(data[i].createdAt ?? "")),
+                            data[i].status == 2 ? 'Active' : 'Inactive',
+                          ],
+                      ];
+
+                      CsvHelper.exportToCSV(
+                          exportData, 'cleaner_management_data');
+                    },
+                    child: AppIcons.downloadIcon),
+                const CommonText(
                   text: "Download",
                   color: AppColors.iconBlue,
                   fontSize: 14,
@@ -124,7 +153,7 @@ class _CleanerManagementScreenState extends State<CleanerManagementScreen> {
                 ))
               ],
             ),
-            PoppinsNormal500(
+            const PoppinsNormal500(
               text: "Cleaner Management",
               fontSize: 20,
             ),
@@ -192,7 +221,7 @@ class _CleanerManagementScreenState extends State<CleanerManagementScreen> {
       const DataColumn(label: PoppinsNormal500(text: 'S.No.', fontSize: 12)),
       const DataColumn(
           label: PoppinsNormal500(
-              text: 'Profile Name.',
+              text: 'Profile Name',
               fontSize: 12,
               overflow: TextOverflow.ellipsis)),
       const DataColumn(label: PoppinsNormal500(text: 'Email', fontSize: 12)),

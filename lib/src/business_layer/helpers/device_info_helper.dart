@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
-
 import '../../data_layer/res/numbers.dart';
 import 'log_helper.dart';
 

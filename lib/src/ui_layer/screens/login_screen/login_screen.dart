@@ -18,7 +18,6 @@ import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_buttons.dart'
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text_field.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/base_widget.dart';
-import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_alerts.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/utils/responsive.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -39,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    loginBloc.add(LoginInitialEvent());
+    // loginBloc.add(LoginInitialEvent());
     super.initState();
   }
 
@@ -57,12 +56,13 @@ class _LoginScreenState extends State<LoginScreen> {
       listenWhen: (previous, current) => current is LoginActionState,
       // buildWhen: (previous, current) => current is! LoginActionState,
       listener: (context, state) {
+        if (state is LoginLoadingState) {
+          _isLoading = true;
+        }
         if (state is LoginNavigateToHomeActionState) {
-          _isLoading = false;
           context.goNamed("dashboard");
-        } else if (state is LoginNavigateToForgetPasswordActionState) {
-          context.go("/forgot-password");
         } else {
+          _isLoading = false;
           log("Error");
         }
       },
@@ -276,14 +276,16 @@ class _LoginScreenState extends State<LoginScreen> {
           // } else {
           print("state==>> $state");
           return AnimatedButton(
+            disabled: (_emailController.text.isNotEmpty &&
+                    _passwordController.text.isNotEmpty &&
+                    _checkBoxValue)
+                ? false
+                : true,
             loading: state is LoginLoadingState ? true : false,
             onPressed: () async {
               log("Logged IN Status==>>${await UserStateHiveHelper.instance.getIsUserLoggedIn()}");
-              // if (_formKey.currentState!.validate()) {
-              // loginBloc.add(LoginToHomeNavigateEvent());
               loginBloc.add(LoginButtonClickedEvent(
                   loginRequestModel: _getLoginRequestModel));
-              await UserStateHiveHelper.instance.setIsUserLoggedIn(true);
             },
             title: "Sign in",
             width: DeviceInfo.width,
@@ -304,9 +306,10 @@ class _LoginScreenState extends State<LoginScreen> {
   /// Login Request
   LoginRequestModel get _getLoginRequestModel => LoginRequestModel(
       email: "admin@yopmail.com",
+      password: "@Test1234",
       // email: _emailController.text,
       // password: _passwordController.text,
-      password: "@Test123",
+
       deviceToken: "abcd",
       deviceId: "abcd",
       deviceType: "abcd");

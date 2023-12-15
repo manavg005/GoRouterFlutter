@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/utils/responsive.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/styles.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/base_widget.dart';
 
-import '../../../business_layer/helpers/device_info_helper.dart';
-import '../../../business_layer/utils/helper/validator.dart';
-import '../../../data_layer/res/colors.dart';
-import '../../../data_layer/res/icons.dart';
-import '../../../data_layer/res/images.dart';
-import '../../../data_layer/res/numbers.dart';
-import '../../../data_layer/res/regex.dart';
-import '../../widgets/app_buttons.dart';
-import '../../widgets/app_text_field.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/device_info_helper.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/utils/helper/validator.dart';
+import 'package:keypitkleen_flutter_admin/src/data_layer/res/colors.dart';
+import 'package:keypitkleen_flutter_admin/src/data_layer/res/icons.dart';
+import 'package:keypitkleen_flutter_admin/src/data_layer/res/images.dart';
+import 'package:keypitkleen_flutter_admin/src/data_layer/res/regex.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_buttons.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text_field.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({super.key});

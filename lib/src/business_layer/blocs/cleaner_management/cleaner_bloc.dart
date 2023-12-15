@@ -3,19 +3,17 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/util_helper.dart';
-import 'package:keypitkleen_flutter_admin/src/business_layer/repositories/dashboard_repository.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/repositories/cleaner_management_repository.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/base/base_api_response_model.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/cleaner_active_inactive_response.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/cleaner_management_response_model.dart';
-
-import 'cleaner_bloc.dart';
 
 part 'cleaner_event.dart';
 part 'cleaner_state.dart';
 
 class CleanerManagementBloc
     extends Bloc<CleanerManagementEvent, CleanerManagementState> {
-  final DashboardRepository _dashboardRepository = DashboardRepository();
+  final CleanerRepository _cleanerRepository = CleanerRepository();
   CleanerManagementResponseModel _cleanerManagementResponseModel =
       CleanerManagementResponseModel();
   CleanerActiveInactiveResponseModel _activeInactiveResponseModel =
@@ -60,7 +58,7 @@ class CleanerManagementBloc
     emit(CleanerManagementLoadingState());
 
     final BaseApiResponseModel response =
-        await _dashboardRepository.cleanerManagement(search, page);
+        await _cleanerRepository.cleanerManagement(search, page);
 
     if (response.data != null &&
         response.data is CleanerManagementResponseModel) {
@@ -114,7 +112,7 @@ class CleanerManagementBloc
       Emitter<CleanerManagementState> emit) async {
     // emit(UserManagementLoadingState());
     final BaseApiResponseModel response =
-        await _dashboardRepository.cleanerActiveInactive(event.userId);
+        await _cleanerRepository.cleanerActiveInactive(event.userId);
     if (response.data != null &&
         response.data is CleanerActiveInactiveResponseModel) {
       _activeInactiveResponseModel = response.data;

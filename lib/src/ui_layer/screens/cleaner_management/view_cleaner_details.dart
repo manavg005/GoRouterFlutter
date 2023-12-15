@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/colors.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/icons.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/styles.dart';
-import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_buttons.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/image_widget.dart';
 
@@ -80,7 +79,7 @@ class _CleanerDetailsScreenState extends State<CleanerDetailsScreen> {
         backgroundColor:
             MaterialStateProperty.all<Color>(AppColors.buttonBackgroundRed),
       ),
-      child: Text(
+      child: const Text(
         "Block",
         style: TextStyle(color: AppColors.buttonTextRed),
       ),

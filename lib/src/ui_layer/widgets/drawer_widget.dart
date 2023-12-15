@@ -24,7 +24,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     return Drawer(
       shape: LinearBorder.start(),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 14),
+        padding: const EdgeInsets.symmetric(horizontal: 14),
         color: AppColors.mainColor,
         child: Column(
           children: [
@@ -88,16 +88,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
     return Container(
       // padding: EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(7)),
+        borderRadius: const BorderRadius.all(Radius.circular(7)),
         color: widget.selectedIndex == index
-            ? Color.fromRGBO(255, 255, 255, 0.28)
+            ? const Color.fromRGBO(255, 255, 255, 0.28)
             : AppColors.mainColor,
       ),
       child: ListTile(
         leading: leadingIcon,
         title: Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             color: AppColors.whiteColor,
           ),
         ),

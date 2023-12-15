@@ -1,14 +1,13 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/log_helper.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/dialog_util.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/util_helper.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/repositories/dashboard_repository.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/base/base_api_response_model.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/request/send_notification_request.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/notification_management_response.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/send_notification_response.dart';
-import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_alerts.dart';
 import 'package:meta/meta.dart';
 
 part 'notification_event.dart';
@@ -94,7 +93,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     if (response.data != null &&
         response.data is SendNotificationResponseModel) {
       _notiResponseModel = response.data;
-      AlertHelper.showToast(_notiResponseModel.msg!);
+      DialogUtil.showToast(_notiResponseModel.msg!);
     } else {
       emit(NotificationErrorState(
           errorMessage: UtilHelper.instance

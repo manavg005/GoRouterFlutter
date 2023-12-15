@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/login_bloc/login_bloc.dart';
+import 'package:keypitkleen_flutter_admin/src/data_layer/models/request/change_password_request_model.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/colors.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/routes/route_names.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/styles.dart';
@@ -20,12 +23,13 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
+  LoginBloc _bloc = LoginBloc();
   bool _isCurrentPasswordVisible = false;
   bool _isNewPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
-  TextEditingController _currentPassword = TextEditingController();
-  TextEditingController _newPassword = TextEditingController();
-  TextEditingController _confirmPassword = TextEditingController();
+  final TextEditingController _currentPassword = TextEditingController();
+  final TextEditingController _newPassword = TextEditingController();
+  final TextEditingController _confirmPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -75,8 +79,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Widget _changePasswordContainer(BuildContext context) {
     return Center(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 52, vertical: 19),
-        height: 522,
+        padding: const EdgeInsets.symmetric(horizontal: 52, vertical: 19),
+        // height: 522,
         width: 400,
         decoration: BoxDecoration(
             shape: BoxShape.rectangle,
@@ -140,7 +144,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               icon: AppIcons.passwordIcon,
               labelText: "Confirm Password",
               validator: (value) {
-                _confirmPasswordValidator(value);
+                return _confirmPasswordValidator(value);
               },
               obscureText: !_isConfirmPasswordVisible,
               filled: true,
@@ -171,7 +175,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             _saveButton(),
             AppStyles.sbHeight19,
             InkWell(
-                onTap: () => context.pushNamed(RouteNames.dashboard),
+                onTap: () => null,
                 child: const PoppinsNormal500(
                   text: "Cancel",
                   fontSize: 14,
@@ -183,16 +187,31 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     );
   }
 
-  AnimatedButton _saveButton() {
-    return AnimatedButton(
-      width: double.infinity,
-      buttonColor: AppColors.mainColor,
-      title: "SAVE",
-      titleTextStyle: TextStyle(
-        color: AppColors.fadeWhite,
-        fontWeight: FontWeight.w600,
-        fontSize: 16,
-      ),
+  Widget _saveButton() {
+    return BlocConsumer<LoginBloc, LoginState>(
+      bloc: _bloc,
+      builder: (context, state) {
+        return AnimatedButton(
+          loading: state is LoginLoadingState ? true : false,
+          width: double.infinity,
+          buttonColor: AppColors.mainColor,
+          title: "SAVE",
+          titleTextStyle: const TextStyle(
+            color: AppColors.fadeWhite,
+            fontWeight: FontWeight.w600,
+            fontSize: 16,
+          ),
+          onPressed: () {
+            _bloc.add(ChangePasswordClickedEvent(
+                changePasswordRequestModel: _changePasswordRequestModel));
+          },
+        );
+      },
+      listener: (context, state) {
+        if (state is ChangePasswordActionState) {
+          context.goNamed("dashboard");
+        }
+      },
     );
   }
 
@@ -207,4 +226,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     }
     return "Please enter a password";
   }
+
+  ChangePasswordRequestModel get _changePasswordRequestModel =>
+      ChangePasswordRequestModel(
+        confirmPassword: _confirmPassword.text,
+        newPassword: _newPassword.text,
+        currentPassword: _currentPassword.text,
+      );
 }

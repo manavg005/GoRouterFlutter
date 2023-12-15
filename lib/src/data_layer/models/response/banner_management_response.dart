@@ -38,8 +38,8 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (this.bannerData != null) {
-      data['data'] = this.bannerData!.toJson();
+    if (bannerData != null) {
+      data['data'] = bannerData!.toJson();
     }
     return data;
   }

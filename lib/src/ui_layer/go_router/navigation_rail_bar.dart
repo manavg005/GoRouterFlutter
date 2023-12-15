@@ -1,5 +1,3 @@
-// Stateful navigation based on:
-// https://github.com/flutter/packages/blob/main/packages/go_router/example/lib/stateful_shell_route.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/colors.dart';
@@ -27,19 +25,19 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      if (constraints.maxWidth < 450) {
+      /*if (constraints.maxWidth < 450) {
         return ScaffoldWithNavigationBar(
           body: navigationShell,
           selectedIndex: navigationShell.currentIndex,
           onDestinationSelected: _goBranch,
         );
-      } else {
-        return ScaffoldWithNavigationRail(
-          body: navigationShell,
-          selectedIndex: navigationShell.currentIndex,
-          onDestinationSelected: _goBranch,
-        );
-      }
+      } else {*/
+      return ScaffoldWithNavigationRail(
+        body: navigationShell,
+        selectedIndex: navigationShell.currentIndex,
+        onDestinationSelected: _goBranch,
+      );
+      // }
     });
   }
 }
@@ -152,12 +150,12 @@ class ScaffoldWithNavigationRail extends StatelessWidget {
                               ? NavigationRailLabelType.all
                               : NavigationRailLabelType.none,
                       backgroundColor: AppColors.mainColor,
-                      unselectedLabelTextStyle: TextStyle(
+                      unselectedLabelTextStyle: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
-                      selectedLabelTextStyle: TextStyle(
+                      selectedLabelTextStyle: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -184,6 +182,7 @@ class ScaffoldWithNavigationRail extends StatelessWidget {
                             text: "Cleaner Management",
                             fontSize: 16,
                             color: Colors.white,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           icon: AppIcons.cleanerIcon,
                         ),
@@ -192,6 +191,7 @@ class ScaffoldWithNavigationRail extends StatelessWidget {
                             text: "Booking Management",
                             fontSize: 16,
                             color: Colors.white,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           icon: AppIcons.bookingIcon,
                         ),
@@ -200,6 +200,7 @@ class ScaffoldWithNavigationRail extends StatelessWidget {
                             text: "Payment Management",
                             fontSize: 16,
                             color: Colors.white,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           icon: AppIcons.paymentIcon,
                         ),
@@ -208,6 +209,7 @@ class ScaffoldWithNavigationRail extends StatelessWidget {
                             text: "Notification Management",
                             fontSize: 16,
                             color: Colors.white,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           icon: AppIcons.notificationIcon,
                         ),
@@ -216,12 +218,15 @@ class ScaffoldWithNavigationRail extends StatelessWidget {
                             text: "Banner Management",
                             fontSize: 16,
                             color: Colors.white,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           icon: AppIcons.bannerIcon,
                         ),
                       ],
-                      unselectedIconTheme: IconThemeData(color: Colors.white),
-                      selectedIconTheme: IconThemeData(color: Colors.white),
+                      unselectedIconTheme:
+                          const IconThemeData(color: Colors.white),
+                      selectedIconTheme:
+                          const IconThemeData(color: Colors.white),
                     ),
                   ),
                 ),
@@ -236,3 +241,70 @@ class ScaffoldWithNavigationRail extends StatelessWidget {
     );
   }
 }
+
+/*
+                      destinations: <NavigationRailDestination>[
+                        NavigationRailDestination(
+                          label: const PoppinsNormal500(
+                            text: "Dashboard",
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                          icon: AppIcons.dashboardIcon,
+                        ),
+                        NavigationRailDestination(
+                          label: const PoppinsNormal500(
+                            text: "User Management",
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                          icon: AppIcons.profileIcon,
+                        ),
+                        NavigationRailDestination(
+                          label: const PoppinsNormal500(
+                            text: "Cleaner Management",
+                            fontSize: 16,
+                            color: Colors.white,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          icon: AppIcons.cleanerIcon,
+                        ),
+                        NavigationRailDestination(
+                          label: const PoppinsNormal500(
+                            text: "Booking Management",
+                            fontSize: 16,
+                            color: Colors.white,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          icon: AppIcons.bookingIcon,
+                        ),
+                        NavigationRailDestination(
+                          label: const PoppinsNormal500(
+                            text: "Payment Management",
+                            fontSize: 16,
+                            color: Colors.white,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          icon: AppIcons.paymentIcon,
+                        ),
+                        NavigationRailDestination(
+                          label: const PoppinsNormal500(
+                            text: "Notification Management",
+                            fontSize: 16,
+                            color: Colors.white,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          icon: AppIcons.notificationIcon,
+                        ),
+                        NavigationRailDestination(
+                          label: const PoppinsNormal500(
+                            text: "Banner Management",
+                            fontSize: 16,
+                            color: Colors.white,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          icon: AppIcons.bannerIcon,
+                        ),
+                      ],
+
+ */

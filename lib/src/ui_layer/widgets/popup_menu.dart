@@ -38,7 +38,7 @@ class PopUpMenu extends StatelessWidget {
           context.go('/dashboard/change-password');
         }
       },
-      offset: Offset(-20, 60),
+      offset: const Offset(-20, 60),
       elevation: 5,
       itemBuilder: (BuildContext context) => [
         PopupMenuItem<String>(
@@ -55,7 +55,7 @@ class PopUpMenu extends StatelessWidget {
                   child: AppIcons.profileCircle,
                 ),
               ),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -90,20 +90,23 @@ class PopUpMenu extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                 decoration: BoxDecoration(
                   color: AppColors.blueLightShadeColor,
                   border: Border.all(color: Colors.black),
                 ),
-                child: PoppinsNormal500(text: "Change Password", fontSize: 12),
+                child: const PoppinsNormal500(
+                    text: "Change Password", fontSize: 12),
               ),
-              SizedBox(width: 10), // Adjust as needed
+              const SizedBox(width: 10), // Adjust as needed
               Container(
-                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-                decoration: BoxDecoration(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                decoration: const BoxDecoration(
                   color: Colors.black,
                 ),
-                child: PoppinsNormal500(
+                child: const PoppinsNormal500(
                   text: "Logout",
                   fontSize: 12,
                   color: AppColors.whiteColor,

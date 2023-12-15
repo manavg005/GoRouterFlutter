@@ -1,13 +1,10 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/login_bloc/login_bloc.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/routes/login_info.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/routes/route_names.dart';
-import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/home_screen/change_password_screen.dart';
-import 'package:provider/provider.dart';
-
-import '../../business_layer/network/request_response_type.dart';
 import '../../data_layer/local_db/user_state_hive_helper.dart';
 import '../../data_layer/res/colors.dart';
 import '../../data_layer/res/icons.dart';
@@ -29,17 +26,17 @@ class CommonAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CommonAppBarState extends State<CommonAppBar> {
+  LoginBloc _bloc = LoginBloc();
   String fullName = "";
   String email = "";
   String phoneNumber = "";
 
   @override
   void initState() {
-    // print("userDetails App => ${userDetails}");
+    super.initState();
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       _getUserDetails();
     });
-    super.initState();
   }
 
   @override
@@ -86,7 +83,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
 
   /// admin details to show on the top of app bar
   Future<void> _getUserDetails() async {
-    print("local ==> ${window.localStorage['localKey']}");
+    // print("local ==> ${window.localStorage['localKey']}");
     fullName = await UserStateHiveHelper.instance.getUserName();
     email = await UserStateHiveHelper.instance.getUserEmail();
     phoneNumber = await UserStateHiveHelper.instance.getUserPhone();
@@ -174,21 +171,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 10)),
                   // AppStyles.sbWidth12,
-                  CommonAppButton(
-                    onTap: () {
-                      Navigator.pop(context);
-                      GoRouter.of(context).goNamed(RouteNames.login);
-                      UserStateHiveHelper.instance.setIsUserLoggedIn(false);
-                      // _logoutApiCall();
-                    },
-                    text: 'Logout',
-                    buttonColor: AppColors.blackColor,
-                    fontSize: 14,
-                    radius: 0.0,
-                    fontWeight: FontWeight.w500,
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 22),
-                  )
+                  _logoutButton(context)
                 ],
               ),
               AppStyles.sbHeight15,
@@ -196,6 +179,31 @@ class _CommonAppBarState extends State<CommonAppBar> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _logoutButton(BuildContext context) {
+    return BlocBuilder<LoginBloc, LoginState>(
+      bloc: _bloc,
+      builder: (context, state) {
+        return CommonAppButton(
+          onTap: () {
+            Navigator.pop(context);
+            // GoRouter.of(context).goNamed(RouteNames.login);
+            // UserStateHiveHelper.instance.setIsUserLoggedIn(false);
+            // UserStateHiveHelper.instance.clearData();
+            _bloc.add(LogoutButtonClickedEvent());
+
+            // _logoutApiCall();
+          },
+          text: 'Logout',
+          buttonColor: AppColors.blackColor,
+          fontSize: 14,
+          radius: 0.0,
+          fontWeight: FontWeight.w500,
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 22),
+        );
+      },
     );
   }
 

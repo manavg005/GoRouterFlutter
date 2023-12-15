@@ -1,18 +1,19 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/banner_management/banner_bloc.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/cleaner_management/cleaner_bloc.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/user_management/user_management_bloc.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/enums.dart';
 
 class CommonSwitch extends StatefulWidget {
-  CommonSwitch(
-      {Key? key,
-      required this.value,
-      required this.id,
-      required this.screenType,
-      required this.bloc})
-      : super(key: key);
+  CommonSwitch({
+    Key? key,
+    required this.value,
+    required this.id,
+    required this.screenType,
+    required this.bloc,
+  }) : super(key: key);
 
   bool value;
   String id;
@@ -24,6 +25,8 @@ class CommonSwitch extends StatefulWidget {
 }
 
 class _CommonSwitchState extends State<CommonSwitch> {
+  List<bool> bannerSwitchStates = List.generate(2, (index) => false);
+
   @override
   Widget build(BuildContext context) {
     return Transform.scale(

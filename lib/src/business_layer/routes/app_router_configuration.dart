@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/routes/login_info.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/local_db/user_state_hive_helper.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/routes/route_names.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/banner_management/add_banner_screen.dart';
@@ -21,17 +22,27 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorAKey = GlobalKey<NavigatorState>();
 
 final goRouter = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/dashboard',
   navigatorKey: _rootNavigatorKey,
   debugLogDiagnostics: true,
   redirect: (context, state) async {
     final loggedIn = await UserStateHiveHelper.instance.getIsUserLoggedIn();
+    final dashboard = state.matchedLocation == '/';
+    final isLogging = state.matchedLocation == '/login';
     final isForgot = state.matchedLocation == '/forgot';
-    if (!loggedIn && !isForgot) {
+    if (!loggedIn && isForgot) {
+      return '/forgot';
+    }
+    if (!loggedIn) {
       return '/login';
     }
+    if (loggedIn && isLogging) {
+      return '/dashboard';
+    }
+
     return null;
   },
+  refreshListenable: LoginInfo.instance,
   routes: [
     GoRoute(
       path: '/login',
@@ -39,16 +50,16 @@ final goRouter = GoRouter(
       builder: (context, state) {
         return const LoginScreen();
       },
-      redirect: (context, state) async {
-        final loggedIn = await UserStateHiveHelper.instance.getIsUserLoggedIn();
-        // final isForgot = state.name == 'forgot';
-        // log("$isForgot");
-        // log("${state.fullPath}");
-        if (loggedIn) {
-          return '/dashboard';
-        }
-        return null;
-      },
+      // redirect: (context, state) async {
+      //   final loggedIn = await UserStateHiveHelper.instance.getIsUserLoggedIn();
+      //   // final isForgot = state.name == 'forgot';
+      //   // log("$isForgot");
+      //   // log("${state.fullPath}");
+      //   if (loggedIn) {
+      //     return '/dashboard';
+      //   }
+      //   return null;
+      // },
     ),
     GoRoute(
       path: '/forgot',
@@ -64,19 +75,29 @@ final goRouter = GoRouter(
           navigatorKey: _shellNavigatorAKey,
           routes: [
             GoRoute(
-              path: '/',
+              path: '/dashboard',
               name: RouteNames.dashboard,
-              redirect: (context, state) {
-                return '/dashboard';
+              // redirect: (context, state) {
+              //   log("Redirecting to dashboard");
+              //   return '/dashboard';
+              // },
+              pageBuilder: (context, state) {
+                return NoTransitionPage(
+                  key: UniqueKey(),
+                  child: const DashboardScreen(),
+                );
               },
-              // pageBuilder: (context, state) => const NoTransitionPage(
-              //   child: DashboardScreen(),
-              // ),
               routes: [
                 GoRoute(
                   path: 'dashboard',
                   builder: (context, state) {
                     return const DashboardScreen();
+                  },
+                  pageBuilder: (context, state) {
+                    return NoTransitionPage(
+                      key: UniqueKey(),
+                      child: const DashboardScreen(),
+                    );
                   },
                 ),
                 GoRoute(

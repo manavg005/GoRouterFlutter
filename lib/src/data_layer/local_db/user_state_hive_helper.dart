@@ -1,9 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-import '../../../app_settings.dart';
+import 'package:keypitkleen_flutter_admin/app_settings.dart';
 import 'hive_database_helper.dart';
 
 /// Helper class to save user information locally on the device
@@ -130,6 +128,7 @@ class UserStateHiveHelper {
     final Box<dynamic> encryptedBox = await _open();
     await encryptedBox.put(Boxes.userEmail, userEmail);
   }
+
   Future<void> setUserPhoneNo(String? userPhone) async {
     final Box<dynamic> encryptedBox = await _open();
     await encryptedBox.put(Boxes.userPhone, userPhone);
@@ -137,20 +136,19 @@ class UserStateHiveHelper {
 
   Future<String> getUserName() async {
     final Box<dynamic> encryptedBox = await _open();
-    final userDetails =
-    await encryptedBox.get(Boxes.userName);
+    final userDetails = await encryptedBox.get(Boxes.userName);
     return userDetails;
   }
+
   Future<String> getUserEmail() async {
     final Box<dynamic> encryptedBox = await _open();
-    final userDetails =
-    await encryptedBox.get(Boxes.userEmail);
+    final userDetails = await encryptedBox.get(Boxes.userEmail);
     return userDetails;
   }
+
   Future<String> getUserPhone() async {
     final Box<dynamic> encryptedBox = await _open();
-    final userDetails =
-    await encryptedBox.get(Boxes.userPhone);
+    final userDetails = await encryptedBox.get(Boxes.userPhone);
     return userDetails;
   }
 }

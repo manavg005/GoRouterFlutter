@@ -10,14 +10,14 @@ class AddBannerResponseModel {
     status = json['status'];
     statusCode = json['statusCode'];
     msg = json['msg'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['statusCode'] = this.statusCode;
-    data['msg'] = this.msg;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['statusCode'] = statusCode;
+    data['msg'] = msg;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -32,14 +32,14 @@ class Data {
 
   Data.fromJson(Map<String, dynamic> json) {
     addBanner = json['addBanner'] != null
-        ? new AddBanner.fromJson(json['addBanner'])
+        ? AddBanner.fromJson(json['addBanner'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.addBanner != null) {
-      data['addBanner'] = this.addBanner!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (addBanner != null) {
+      data['addBanner'] = addBanner!.toJson();
     }
     return data;
   }
@@ -77,15 +77,15 @@ class AddBanner {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['imageUrl'] = this.imageUrl;
-    data['status'] = this.status;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['deletedAt'] = this.deletedAt;
-    data['_id'] = this.sId;
-    data['__v'] = this.iV;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['imageUrl'] = imageUrl;
+    data['status'] = status;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['deletedAt'] = deletedAt;
+    data['_id'] = sId;
+    data['__v'] = iV;
     return data;
   }
 }

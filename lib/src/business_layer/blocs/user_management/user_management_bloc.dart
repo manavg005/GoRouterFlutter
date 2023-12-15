@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
-import 'package:keypitkleen_flutter_admin/src/business_layer/repositories/dashboard_repository.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/repositories/user_management_repository.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/base/base_api_response_model.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/user_active_inactive_response.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/user_management_response.dart';
@@ -14,7 +14,7 @@ part 'user_management_state.dart';
 
 class UserManagementBloc
     extends Bloc<UserManagementEvent, UserManagementState> {
-  final DashboardRepository _dashboardRepository = DashboardRepository();
+  final UserManagementRepository _userRepository = UserManagementRepository();
   UserManagementResponseModel _userManagementResponseModel =
       UserManagementResponseModel();
   UserActiveInactiveResponseModel _activeInactiveResponseModel =
@@ -38,7 +38,7 @@ class UserManagementBloc
     emit(UserManagementLoadingState());
 
     final BaseApiResponseModel response =
-        await _dashboardRepository.userManagement(search, page);
+        await _userRepository.userManagement(search, page);
 
     if (response.data != null && response.data is UserManagementResponseModel) {
       _userManagementResponseModel = response.data;
@@ -82,9 +82,8 @@ class UserManagementBloc
   Future<FutureOr<void>> userActiveInactiveEvent(
       UserActiveInactiveEvent event, Emitter<UserManagementState> emit) async {
     // emit(UserManagementLoadingState());
-    log("In User Active");
     final BaseApiResponseModel response =
-        await _dashboardRepository.userActiveInactive(event.userId);
+        await _userRepository.userActiveInactive(event.userId);
     if (response.data != null &&
         response.data is UserActiveInactiveResponseModel) {
       _activeInactiveResponseModel = response.data;

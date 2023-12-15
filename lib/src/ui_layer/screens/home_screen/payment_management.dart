@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/payment_management_bloc.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/payment_management_response.dart';
+import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_buttons.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text_field.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/base_widget.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_app_bar.dart';
@@ -63,7 +64,7 @@ class _PaymentManagementScreenState extends State<PaymentManagementScreen> {
             return _buildBody(context, state.paymentManagementResponseModel,
                 state.currentPage);
           } else {
-            return SizedBox();
+            return const SizedBox();
           }
         },
       ),
@@ -134,22 +135,6 @@ class _PaymentManagementScreenState extends State<PaymentManagementScreen> {
         ),
       ),
     );
-  }
-
-  Widget CommonIconButton({
-    required IconData icon,
-    required VoidCallback onPressed,
-    bool isButtonEnabled = true,
-  }) {
-    return isButtonEnabled
-        ? IconButton(
-            onPressed: onPressed,
-            icon: Icon(
-              icon,
-              color: isButtonEnabled ? Colors.black : Colors.grey,
-            ),
-          )
-        : SizedBox();
   }
 
   Widget searchTextFields(int currentPage) {
@@ -243,7 +228,7 @@ class _PaymentManagementScreenState extends State<PaymentManagementScreen> {
             onChanged: (query) {
               if (_debounce?.isActive ?? false) _debounce?.cancel();
 
-              _debounce = Timer(Duration(milliseconds: 500), () {
+              _debounce = Timer(const Duration(milliseconds: 500), () {
                 currentPage = 1;
                 _bloc.add(PaymentManagementSearchEvent(
                   searchQuery: _searchController.text,
@@ -289,9 +274,9 @@ class _PaymentManagementScreenState extends State<PaymentManagementScreen> {
   Widget topNavigationROute() {
     return Row(
       children: [
-        PoppinsLight400(text: "Dashboard", fontSize: 12),
+        const PoppinsLight400(text: "Dashboard", fontSize: 12),
         AppIcons.arrowRight,
-        PoppinsLight400(text: "Payment Management", fontSize: 12),
+        const PoppinsLight400(text: "Payment Management", fontSize: 12),
       ],
     );
   }

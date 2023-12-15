@@ -26,4 +26,6 @@ class LoginErrorState extends LoginState {
 
 class LoginNavigateToHomeActionState extends LoginActionState {}
 
-class LoginNavigateToForgetPasswordActionState extends LoginActionState {}
+class LogoutActionState extends LoginActionState {}
+
+class ChangePasswordActionState extends LoginActionState {}

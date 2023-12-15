@@ -69,12 +69,12 @@ class ValidatorHelper {
 
   static String? validateCurrentPassword(String? value) {
     if (value!.isNotEmpty) {
-      /*if (value.length < 8) {
-        return localizations.password_validator_msg_character_must_be;
-      }*/
+      // if (value.length < 8) {
+      //   return "Please enter your current password";
+      // }
       return null;
     }
-    return 'Message';
+    return 'Please enter your current password';
   }
 
   static String? nonEmptyValidation(String? value, String fieldTitle) {

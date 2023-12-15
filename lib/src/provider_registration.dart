@@ -4,10 +4,6 @@ import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/banner_manage
 import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/dashboard/dashboard_bloc.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/notification_management/notification_bloc.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/user_management/user_management_bloc.dart';
-import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/payment_management/dashboard_screen.dart';
-import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/home_screen/user_management.dart';
-import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/login_screen/login_screen.dart';
-import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/notification_management/notification_management.dart';
 import 'package:provider/single_child_widget.dart';
 
 import 'business_layer/blocs/login_bloc/login_bloc.dart';
@@ -17,21 +13,15 @@ class RegisterBloc {
   static List<SingleChildWidget> blocs(BuildContext context) => [
         BlocProvider(
           create: (context) => LoginBloc(),
-          child: LoginScreen(),
         ),
         BlocProvider(
           create: (context) => DashboardBloc(),
-          child: DashboardScreen(),
         ),
         BlocProvider(
           create: (context) => UserManagementBloc(),
-          child: UserManagementScreen(),
         ),
         BlocProvider(
           create: (context) => NotificationBloc(),
-          child: NotificationManagementScreen(
-            detailsPath: '',
-          ),
         ),
         BlocProvider(
           create: (context) => BannerBloc(),

@@ -246,8 +246,8 @@ class _AddBannerScreenState extends State<AddBannerScreen> {
     if (result != null && result.files.isNotEmpty) {
       Uint8List? fileBytes = result.files.first.bytes;
       final fileName = result.files.first.name;
-      log(fileName);
-      log("${fileBytes}");
+      // log(fileName);
+      // log("${fileBytes}");
       setState(() {
         _fileNameController.text = fileName;
         _fileByte = fileBytes;

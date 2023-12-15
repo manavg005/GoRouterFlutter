@@ -11,14 +11,14 @@ class ForgotPasswordResponseModel {
     status = json['status'];
     statusCode = json['statusCode'];
     msg = json['msg'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['statusCode'] = this.statusCode;
-    data['msg'] = this.msg;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['statusCode'] = statusCode;
+    data['msg'] = msg;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -52,13 +52,13 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['userId'] = this.userId;
-    data['timestamp'] = this.timestamp;
-    data['createdAt'] = this.createdAt;
-    data['_id'] = this.sId;
-    data['__v'] = this.iV;
-    data['token'] = this.token;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['userId'] = userId;
+    data['timestamp'] = timestamp;
+    data['createdAt'] = createdAt;
+    data['_id'] = sId;
+    data['__v'] = iV;
+    data['token'] = token;
     return data;
   }
 }

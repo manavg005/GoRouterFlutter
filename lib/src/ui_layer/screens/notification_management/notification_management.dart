@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -9,7 +10,6 @@ import 'package:keypitkleen_flutter_admin/src/data_layer/res/colors.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/icons.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/styles.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text.dart';
-import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text_field.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_app_bar.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/data_table.dart';
 
@@ -37,7 +37,22 @@ class _NotificationManagementScreenState
   }
 
   @override
+  void didUpdateWidget(covariant NotificationManagementScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    log("In Did update");
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    log("In Did change dependencies");
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    log("In build method");
     return BaseWidgetWithAppBar(
       appBar: CommonAppBar(),
       body: BlocBuilder<NotificationBloc, NotificationState>(
@@ -49,7 +64,7 @@ class _NotificationManagementScreenState
             return _buildBody(context,
                 state.notificationManagementResponseModel, state.currentPage);
           } else {
-            return SizedBox();
+            return const SizedBox();
           }
         },
       ),
@@ -70,20 +85,21 @@ class _NotificationManagementScreenState
               children: [
                 Row(
                   children: [
-                    PoppinsLight400(text: "Dashboard", fontSize: 12),
+                    const PoppinsLight400(text: "Dashboard", fontSize: 12),
                     AppIcons.arrowRight,
-                    PoppinsLight400(
+                    const PoppinsLight400(
                         text: "Notification Management", fontSize: 12),
                   ],
                 ),
-                Spacer(),
+                const Spacer(),
                 InkWell(
                     onTap: () {
                       context
                           .go('/notification-management/send-new-notification');
                     },
                     child: AppIcons.addIcon),
-                CommonText(
+                AppStyles.sbWidth5,
+                const CommonText(
                   text: "Send new Notification",
                   color: AppColors.iconBlue,
                   fontSize: 14,
@@ -91,7 +107,7 @@ class _NotificationManagementScreenState
                 AppStyles.sbWidth32,
               ],
             ),
-            PoppinsNormal500(
+            const PoppinsNormal500(
               text: "Notification Management",
               fontSize: 20,
             ),
@@ -110,7 +126,7 @@ class _NotificationManagementScreenState
                         ? _bloc.add(
                             NotificationLoadPreviousEvent(),
                           )
-                        : SizedBox();
+                        : const SizedBox();
                     // setState(() {});
                   },
                   icon: Icon(
@@ -157,7 +173,7 @@ class _NotificationManagementScreenState
   List<DataColumn> _createColumns() {
     return [
       const DataColumn(label: PoppinsNormal500(text: 'S.No.', fontSize: 12)),
-      DataColumn(
+      const DataColumn(
           label: PoppinsNormal500(
               text: 'Notification Message',
               fontSize: 12,

@@ -360,7 +360,7 @@ class SearchTextField extends StatelessWidget {
 
   OutlineInputBorder _inputBorder() {
     return OutlineInputBorder(
-      borderSide: BorderSide(
+      borderSide: const BorderSide(
         width: 0.5,
         color: AppColors.subHeadingBlackColor,
       ),
@@ -418,7 +418,7 @@ class CommonTextFieldWithTitle extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            icon ?? SizedBox.shrink(),
+            icon ?? const SizedBox.shrink(),
             AppStyles.sbWidth3,
             PoppinsNormal500(
               text: title ?? "",

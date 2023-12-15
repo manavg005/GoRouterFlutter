@@ -11,14 +11,14 @@ class SendNotificationResponseModel {
     status = json['status'];
     statusCode = json['statusCode'];
     msg = json['msg'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['statusCode'] = this.statusCode;
-    data['msg'] = this.msg;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['statusCode'] = statusCode;
+    data['msg'] = msg;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -33,14 +33,14 @@ class Data {
 
   Data.fromJson(Map<String, dynamic> json) {
     addNotification = json['addNotification'] != null
-        ? new AddNotification.fromJson(json['addNotification'])
+        ? AddNotification.fromJson(json['addNotification'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.addNotification != null) {
-      data['addNotification'] = this.addNotification!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (addNotification != null) {
+      data['addNotification'] = addNotification!.toJson();
     }
     return data;
   }
@@ -72,13 +72,13 @@ class AddNotification {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['target'] = this.target;
-    data['title'] = this.title;
-    data['message'] = this.message;
-    data['createdAt'] = this.createdAt;
-    data['_id'] = this.sId;
-    data['__v'] = this.iV;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['target'] = target;
+    data['title'] = title;
+    data['message'] = message;
+    data['createdAt'] = createdAt;
+    data['_id'] = sId;
+    data['__v'] = iV;
     return data;
   }
 }

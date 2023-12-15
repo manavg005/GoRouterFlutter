@@ -4,20 +4,12 @@ import 'package:keypitkleen_flutter_admin/src/business_layer/network/api_constan
 import 'package:keypitkleen_flutter_admin/src/business_layer/network/app_network.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/network/request_response_type.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/base/base_api_response_model.dart';
-import 'package:keypitkleen_flutter_admin/src/data_layer/models/request/add_banner_request.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/request/send_notification_request.dart';
-import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/add_banner_response.dart';
-import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/banner_active_inactive_response.dart';
-import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/banner_management_response.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/booking_management_response.dart';
-import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/cleaner_active_inactive_response.dart';
-import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/cleaner_management_response_model.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/home_management_response.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/notification_management_response.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/payment_management_response.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/send_notification_response.dart';
-import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/user_active_inactive_response.dart';
-import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/user_management_response.dart';
 
 class DashboardRepository {
   Map<String, dynamic>? _responseBody;
@@ -42,125 +34,6 @@ class DashboardRepository {
       return BaseApiResponseModel(exceptionType: ExceptionType.parseException);
     }
   }
-
-  Future<BaseApiResponseModel> userManagement(String search, int page) async {
-    try {
-      BaseApiResponseModel response = await AppNetwork().request(
-        url: ApiConstants.userManagement,
-        requestType: HttpRequestMethods.get,
-        queryParameter: {
-          "page": "$page",
-          "size": "10",
-          "search": search,
-        },
-      );
-      LogHelper.logData(
-          "DashboardRepository -> user_management ${response.data}");
-      if (response.data != null) {
-        _responseBody = jsonDecode(response.data.toString());
-        return BaseApiResponseModel(
-            data: UserManagementResponseModel.fromJson(_responseBody!));
-      } else {
-        return BaseApiResponseModel(exceptionType: response.exceptionType);
-      }
-    } catch (e) {
-      LogHelper.logError("DashboardRepository -> user_management => $e");
-      return BaseApiResponseModel(exceptionType: ExceptionType.parseException);
-    }
-  }
-
-  Future<BaseApiResponseModel> userActiveInactive(String userId) async {
-    try {
-      BaseApiResponseModel response = await AppNetwork().request(
-        url: ApiConstants.userActiveInactive(userId),
-        requestType: HttpRequestMethods.patch,
-      );
-      LogHelper.logData(
-          "DashboardRepository -> user_management_active_inactive ${response.data}");
-      if (response.data != null) {
-        _responseBody = jsonDecode(response.data.toString());
-        return BaseApiResponseModel(
-            data: UserActiveInactiveResponseModel.fromJson(_responseBody!));
-      } else {
-        return BaseApiResponseModel(exceptionType: response.exceptionType);
-      }
-    } catch (e) {
-      LogHelper.logError(
-          "DashboardRepository -> user_management_active_inactive => $e");
-      return BaseApiResponseModel(exceptionType: ExceptionType.parseException);
-    }
-  }
-
-  Future<BaseApiResponseModel> cleanerActiveInactive(String userId) async {
-    try {
-      BaseApiResponseModel response = await AppNetwork().request(
-        url: ApiConstants.cleanerActiveInactive(userId),
-        requestType: HttpRequestMethods.patch,
-      );
-      LogHelper.logData(
-          "DashboardRepository -> cleaner_management_active_inactive ${response.data}");
-      if (response.data != null) {
-        _responseBody = jsonDecode(response.data.toString());
-        return BaseApiResponseModel(
-            data: CleanerActiveInactiveResponseModel.fromJson(_responseBody!));
-      } else {
-        return BaseApiResponseModel(exceptionType: response.exceptionType);
-      }
-    } catch (e) {
-      LogHelper.logError(
-          "DashboardRepository -> cleaner_management_active_inactive => $e");
-      return BaseApiResponseModel(exceptionType: ExceptionType.parseException);
-    }
-  }
-
-  Future<BaseApiResponseModel> cleanerManagement(
-      String search, int page) async {
-    try {
-      BaseApiResponseModel response = await AppNetwork().request(
-        url: ApiConstants.cleanerManagement,
-        requestType: HttpRequestMethods.get,
-        queryParameter: {
-          "search": search,
-          "page": "$page",
-          "size": "10",
-        },
-      );
-      LogHelper.logData(
-          "DashboardRepository -> cleaner_management ${response.data}");
-      if (response.data != null) {
-        _responseBody = jsonDecode(response.data.toString());
-        return BaseApiResponseModel(
-            data: CleanerManagementResponseModel.fromJson(_responseBody!));
-      } else {
-        return BaseApiResponseModel(exceptionType: response.exceptionType);
-      }
-    } catch (e) {
-      LogHelper.logError("DashboardRepository -> cleaner_management => $e");
-      return BaseApiResponseModel(exceptionType: ExceptionType.parseException);
-    }
-  }
-
-  // Future<BaseApiResponseModel> cleanerActiveInactive(String userId) async {
-  //   try {
-  //     BaseApiResponseModel response = await AppNetwork().request(
-  //       url: ApiConstants.cleanerActiveInactive(userId),
-  //       requestType: HttpRequestMethods.patch,
-  //     );
-  //     LogHelper.logData(
-  //         "DashboardRepository -> cleaner_management_active_inactive ${response.data}");
-  //     if (response.data != null) {
-  //       _responseBody = jsonDecode(response.data.toString());
-  //       return BaseApiResponseModel(
-  //           data: UserActiveInactiveResponseModel.fromJson(_responseBody!));
-  //     } else {
-  //       return BaseApiResponseModel(exceptionType: response.exceptionType);
-  //     }
-  //   } catch (e) {
-  //     LogHelper.logError(
-  //         "DashboardRepository -> cleaner_management_active_inactive => $e");
-  //     return BaseApiResponseModel(exceptionType: ExceptionType.parseException);
-  //   }
-  // }
 
   Future<BaseApiResponseModel> bookingManagement(
       int status, String search, int page) async {
@@ -215,54 +88,6 @@ class DashboardRepository {
     }
   }
 
-  Future<BaseApiResponseModel> bannerManagement(int page, String search) async {
-    try {
-      BaseApiResponseModel response = await AppNetwork().request(
-        url: ApiConstants.bannerManagement,
-        requestType: HttpRequestMethods.get,
-        queryParameter: {
-          "page": "$page",
-          "size": "10",
-          "search": search,
-        },
-      );
-      LogHelper.logData(
-          "DashboardRepository -> banner_management${response.data}");
-      if (response.data != null) {
-        _responseBody = jsonDecode(response.data.toString());
-        return BaseApiResponseModel(
-            data: BannerManagementResponseModel.fromJson(_responseBody!));
-      } else {
-        return BaseApiResponseModel(exceptionType: response.exceptionType);
-      }
-    } catch (e) {
-      LogHelper.logError("DashboardRepository -> banner_management => $e");
-      return BaseApiResponseModel(exceptionType: ExceptionType.parseException);
-    }
-  }
-
-  Future<BaseApiResponseModel> bannerActiveInactive(String bannerId) async {
-    try {
-      BaseApiResponseModel response = await AppNetwork().request(
-        url: ApiConstants.bannerActiveInactive(bannerId),
-        requestType: HttpRequestMethods.patch,
-      );
-      LogHelper.logData(
-          "DashboardRepository -> banner_management_active_inactive ${response.data}");
-      if (response.data != null) {
-        _responseBody = jsonDecode(response.data.toString());
-        return BaseApiResponseModel(
-            data: BannerActiveInactiveResponseModel.fromJson(_responseBody!));
-      } else {
-        return BaseApiResponseModel(exceptionType: response.exceptionType);
-      }
-    } catch (e) {
-      LogHelper.logError(
-          "DashboardRepository -> banner_management_active_inactive => $e");
-      return BaseApiResponseModel(exceptionType: ExceptionType.parseException);
-    }
-  }
-
   Future<BaseApiResponseModel> sendNotification(
       SendNotificationRequestModel? notiData) async {
     try {
@@ -312,30 +137,6 @@ class DashboardRepository {
       }
     } catch (e) {
       LogHelper.logError("DashboardRepository -> payment_management => $e");
-      return BaseApiResponseModel(exceptionType: ExceptionType.parseException);
-    }
-  }
-
-  Future<BaseApiResponseModel> addBanner(
-      UploadBannerImageRequestModel? bannerData) async {
-    try {
-      BaseApiResponseModel response = await AppNetwork().request(
-          url: ApiConstants.addBanner,
-          requestType: HttpRequestMethods.post,
-          request: await bannerData?.toFormData(),
-          isMultipartEnabled: true);
-
-      if (response.data != null) {
-        _responseBody = jsonDecode(response.data.toString());
-        // jsonDecode(utf8.decode(response.data.toString().runes.toList()));
-        LogHelper.logData("_responseBody===> ${_responseBody.toString()}");
-        return BaseApiResponseModel(
-            data: AddBannerResponseModel.fromJson(_responseBody!));
-      } else {
-        return BaseApiResponseModel(exceptionType: response.exceptionType);
-      }
-    } catch (e) {
-      LogHelper.logError("AuthRepository -> login => $e");
       return BaseApiResponseModel(exceptionType: ExceptionType.parseException);
     }
   }

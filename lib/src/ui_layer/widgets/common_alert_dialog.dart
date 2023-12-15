@@ -126,16 +126,22 @@ class CustomDetailsDialog extends StatelessWidget {
         builder: (context) {
           // var height = MediaQuery.of(context).size.height;
           var width = MediaQuery.of(context).size.width;
-          Color statusColor = (bookingType == MyBookingTab.newBooking)
+          Color statusColor = (details.status == '0')
               ? AppColors.newBookingTextColor
-              : (bookingType == MyBookingTab.accepted)
+              : (details.status == '1')
                   ? AppColors.greenShadeColor
-                  : AppColors.bookingCancelledRed;
-          String statusText = (bookingType == MyBookingTab.newBooking)
+                  : (details.status == '3' || details.status == '4')
+                      ? AppColors.bookingCancelledRed
+                      : AppColors.mainColor;
+          String statusText = (details.status == '0')
               ? "Action Pending By cleaner"
-              : (bookingType == MyBookingTab.accepted)
-                  ? "Accepted On-Going"
-                  : "Completed";
+              : (details.status == '1')
+                  ? "Accepted"
+                  : (details.status == '3')
+                      ? "Completed"
+                      : (details.status == '4')
+                          ? "Cancelled"
+                          : "2";
 
           return SingleChildScrollView(
             child: SizedBox(

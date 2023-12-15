@@ -3,8 +3,9 @@ import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/dialog_util.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/util_helper.dart';
-import 'package:keypitkleen_flutter_admin/src/business_layer/repositories/dashboard_repository.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/repositories/banner_management_repository.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/base/base_api_response_model.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/request/add_banner_request.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/add_banner_response.dart';
@@ -12,13 +13,11 @@ import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/banner_
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/banner_management_response.dart';
 import 'package:meta/meta.dart';
 
-import '../../../ui_layer/widgets/common_alerts.dart';
-
 part 'banner_event.dart';
 part 'banner_state.dart';
 
 class BannerBloc extends Bloc<BannerEvent, BannerState> {
-  final DashboardRepository _dashboardRepository = DashboardRepository();
+  final BannerRepository _bannerRepository = BannerRepository();
 
   BannerManagementResponseModel _bannerManagementResponseModel =
       BannerManagementResponseModel();
@@ -47,11 +46,13 @@ class BannerBloc extends Bloc<BannerEvent, BannerState> {
   FutureOr<void> bannerActiveInactive(
       BannerActiveInactive event, Emitter<BannerState> emit) async {
     final BaseApiResponseModel response =
-        await _dashboardRepository.bannerActiveInactive(event.bannerId);
+        await _bannerRepository.bannerActiveInactive(event.bannerId);
     if (response.data != null &&
         response.data is BannerActiveInactiveResponseModel) {
       _activeInactiveResponseModel = response.data;
       if (_activeInactiveResponseModel.status!) {
+        DialogUtil.showToast(_activeInactiveResponseModel.msg!);
+        emit(BannerNavigateActionState());
       } else {
         // return _activeInactiveResponseModel.msg!;
       }
@@ -69,7 +70,7 @@ class BannerBloc extends Bloc<BannerEvent, BannerState> {
     emit(BannerLoadingState());
 
     final BaseApiResponseModel response =
-        await _dashboardRepository.bannerManagement(page, search);
+        await _bannerRepository.bannerManagement(page, search);
 
     if (response.data != null &&
         response.data is BannerManagementResponseModel) {
@@ -103,12 +104,12 @@ class BannerBloc extends Bloc<BannerEvent, BannerState> {
       AddBannerEvent event, Emitter<BannerState> emit) async {
     emit(BannerLoadingState());
     final BaseApiResponseModel response =
-        await _dashboardRepository.addBanner(event.bannerImageRequestModel);
+        await _bannerRepository.addBanner(event.bannerImageRequestModel);
     log("in add banner");
     if (response.data != null && response.data is AddBannerResponseModel) {
       log("in add banner response");
       _addBannerResponseModel = response.data;
-      AlertHelper.showToast(_addBannerResponseModel.msg!);
+      DialogUtil.showToast(_addBannerResponseModel.msg!);
       emit(BannerNavigateActionState());
     } else {
       emit(BannerErrorState(

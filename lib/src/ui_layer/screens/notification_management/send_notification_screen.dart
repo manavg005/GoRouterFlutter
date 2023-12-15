@@ -12,7 +12,6 @@ import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_buttons.dart'
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text_field.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/base_widget.dart';
-import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_alerts.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_app_bar.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_dropdown_widget.dart';
 
@@ -133,7 +132,8 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> {
                             sendNotificationRequestModel: _sendRequestModel));
                       },
                       title: "Send",
-                      titleTextStyle: TextStyle(color: AppColors.whiteColor),
+                      titleTextStyle:
+                          const TextStyle(color: AppColors.whiteColor),
                       buttonColor: AppColors.ceruleanBlue,
                       // buttonBorderColor: AppColors.ceruleanBlue,
                     ),

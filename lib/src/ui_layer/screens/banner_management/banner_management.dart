@@ -9,6 +9,7 @@ import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/enums.dart'
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/banner_management_response.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/colors.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/icons.dart';
+import 'package:keypitkleen_flutter_admin/src/data_layer/res/images.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/numbers.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/styles.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_buttons.dart';
@@ -32,15 +33,8 @@ class _BannerManagementScreenState extends State<BannerManagementScreen> {
   bool isSelected = false;
   Timer? _debounce;
 
-  void toggleSwitch(bool value) {
-    setState(() {
-      isSelected = !isSelected;
-    });
-  }
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _bloc.add(BannerInitialEvent());
   }
@@ -49,7 +43,7 @@ class _BannerManagementScreenState extends State<BannerManagementScreen> {
   Widget build(BuildContext context) {
     return BaseWidgetWithAppBar(
       appBar: CommonAppBar(),
-      body: BlocBuilder<BannerBloc, BannerState>(
+      body: BlocConsumer<BannerBloc, BannerState>(
         bloc: _bloc,
         builder: (context, state) {
           if (state is BannerLoadingState) {
@@ -60,7 +54,12 @@ class _BannerManagementScreenState extends State<BannerManagementScreen> {
             return _buildBody(context, state.bannerManagementResponseModel,
                 state.currentPage);
           } else {
-            return SizedBox();
+            return const SizedBox();
+          }
+        },
+        listener: (BuildContext context, BannerState state) {
+          if (state is BannerNavigateActionState) {
+            _bloc.add(BannerInitialEvent());
           }
         },
       ),
@@ -199,17 +198,17 @@ class _BannerManagementScreenState extends State<BannerManagementScreen> {
       int itemCount = (currentPage - 1) * 10 + i + 1;
       DataRow dataRowObject = DataRow(cells: [
         DataCell(Text("$itemCount")),
-        // DataCell(SizedBox(height: 27, child: AppImages.bannerImage)),
-        DataCell(Image.network(
-                "https://t4.ftcdn.net/jpg/05/57/64/09/360_F_557640907_PPaRsbaFsPmhq686VA3qQm4tWy0D6pk3.jpg")
-            // CommonNetworkImage(
-            //   // showPlaceholderWidget: false,
-            //   // showErrorIcon: false,
-            //   height: 27,
-            //   imageUrl: " ${data[i].imageUrl}",
-            //   fit: BoxFit.fitHeight,
-            // ),
-            ),
+        DataCell(SizedBox(height: 27, child: AppImages.bannerImage)),
+        // DataCell(Image.network(
+        //         "https://t4.ftcdn.net/jpg/05/57/64/09/360_F_557640907_PPaRsbaFsPmhq686VA3qQm4tWy0D6pk3.jpg")
+        //     // CommonNetworkImage(
+        //     //   // showPlaceholderWidget: false,
+        //     //   // showErrorIcon: false,
+        //     //   height: 27,
+        //     //   imageUrl: " ${data[i].imageUrl}",
+        //     //   fit: BoxFit.fitHeight,
+        //     // ),
+        //     ),
         DataCell(Text("${data[i].name}")),
         DataCell(CommonSwitch(
           value: data[i].status == 2 ? true : false,

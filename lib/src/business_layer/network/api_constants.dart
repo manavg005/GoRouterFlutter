@@ -20,6 +20,8 @@ class ApiConstants {
   /// api end_points - start ---------------------------------------------------
 
   static const String login = "admin/login";
+  static const String logout = "/admin/logout";
+  static const String changePassword = "/admin/change-password";
   static const String homeManagement = "admin/home-management";
   static const String userManagement = "admin/user-management";
   static const String cleanerManagement = "admin/cleaner-management";
@@ -41,9 +43,6 @@ class ApiConstants {
   static String bannerActiveInactive(String? bannerId) {
     return "admin/active-inactive-banner/$bannerId";
   }
-
-  /// passwords
-  static const String changePassword = "/users/changePassword";
 
   /// booking
   static const String getAvailableSlots = "bookings/availableSlots";

@@ -9,7 +9,6 @@ import 'package:keypitkleen_flutter_admin/src/data_layer/res/styles.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/app_text.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/base_widget.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/common_app_bar.dart';
-import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/popup_menu.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -35,13 +34,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
         bloc: _dashboardBloc,
         builder: (context, state) {
           if (state is DashboardLoadingState) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else if (state is DashboardSuccessState) {
             return _buildBody(context, state.homeManagementResponseModel);
           } else {
-            return SizedBox();
+            return const SizedBox();
           }
         },
       ),

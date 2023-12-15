@@ -12,10 +12,10 @@ class CommonResponse {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['statusCode'] = this.statusCode;
-    data['msg'] = this.msg;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['status'] = status;
+    data['statusCode'] = statusCode;
+    data['msg'] = msg;
     return data;
   }
 }

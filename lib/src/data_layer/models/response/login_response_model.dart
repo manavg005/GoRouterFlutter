@@ -10,14 +10,14 @@ class LoginResponseModel {
     status = json['status'];
     statusCode = json['statusCode'];
     msg = json['msg'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['statusCode'] = this.statusCode;
-    data['msg'] = this.msg;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['statusCode'] = statusCode;
+    data['msg'] = msg;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -31,15 +31,13 @@ class Data {
   Data({this.userdata});
 
   Data.fromJson(Map<String, dynamic> json) {
-    userdata = json['data'] != null
-        ? Userdata.fromJson(json['data'])
-        : null;
+    userdata = json['data'] != null ? Userdata.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.userdata != null) {
-      data['data'] = this.userdata!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (userdata != null) {
+      data['data'] = userdata!.toJson();
     }
     return data;
   }
@@ -57,17 +55,17 @@ class Userdata {
 
   Userdata(
       {this.userDetails,
-        this.sId,
-        this.isDeleted,
-        this.deletedAt,
-        this.createdAt,
-        this.updatedAt,
-        this.iV,
-        this.token});
+      this.sId,
+      this.isDeleted,
+      this.deletedAt,
+      this.createdAt,
+      this.updatedAt,
+      this.iV,
+      this.token});
 
   Userdata.fromJson(Map<String, dynamic> json) {
     userDetails = json['userDetails'] != null
-        ? new UserDetails.fromJson(json['userDetails'])
+        ? UserDetails.fromJson(json['userDetails'])
         : null;
     sId = json['_id'];
     isDeleted = json['isDeleted'];
@@ -79,17 +77,17 @@ class Userdata {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.userDetails != null) {
-      data['userDetails'] = this.userDetails!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (userDetails != null) {
+      data['userDetails'] = userDetails!.toJson();
     }
-    data['_id'] = this.sId;
-    data['isDeleted'] = this.isDeleted;
-    data['deletedAt'] = this.deletedAt;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['__v'] = this.iV;
-    data['token'] = this.token;
+    data['_id'] = sId;
+    data['isDeleted'] = isDeleted;
+    data['deletedAt'] = deletedAt;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['__v'] = iV;
+    data['token'] = token;
     return data;
   }
 }
@@ -103,10 +101,10 @@ class UserDetails {
 
   UserDetails(
       {this.firstName,
-        this.lastName,
-        this.countryCode,
-        this.phoneNumber,
-        this.email});
+      this.lastName,
+      this.countryCode,
+      this.phoneNumber,
+      this.email});
 
   UserDetails.fromJson(Map<String, dynamic> json) {
     firstName = json['firstName'];
@@ -117,12 +115,12 @@ class UserDetails {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['firstName'] = this.firstName;
-    data['lastName'] = this.lastName;
-    data['countryCode'] = this.countryCode;
-    data['phoneNumber'] = this.phoneNumber;
-    data['email'] = this.email;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['firstName'] = firstName;
+    data['lastName'] = lastName;
+    data['countryCode'] = countryCode;
+    data['phoneNumber'] = phoneNumber;
+    data['email'] = email;
     return data;
   }
 }

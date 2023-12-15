@@ -3,10 +3,25 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../data_layer/res/colors.dart';
 
 class DialogUtil {
+  static void showToast(
+    String message,
+  ) {
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 2,
+        textColor: AppColors.whiteColor,
+        webShowClose: true,
+        webBgColor: AppColors.blueLinearGradient,
+        fontSize: 16.0);
+  }
+
   static void showAlertDialog(
       BuildContext context, String title, String message, Function onTapped) {
     (Platform.isAndroid)

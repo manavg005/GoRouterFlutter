@@ -182,15 +182,15 @@ class _AnimatedButtonState extends State<AnimatedButton> {
         widget.onPressed?.call();
 
         /// shrink or expand
-        // setState(() {
-        //   if (widget.shrinkOnTapHold) {
-        //     widget.width += widget.widthChangeOnHold;
-        //     widget.height += widget.heightChangeOnHold;
-        //   } else {
-        //     widget.width -= widget.widthChangeOnHold;
-        //     widget.height -= widget.heightChangeOnHold;
-        //   }
-        // });
+        setState(() {
+          if (widget.shrinkOnTapHold) {
+            widget.width += widget.widthChangeOnHold;
+            widget.height += widget.heightChangeOnHold;
+          } else {
+            widget.width -= widget.widthChangeOnHold;
+            widget.height -= widget.heightChangeOnHold;
+          }
+        });
       },
       child: AnimatedContainer(
         duration: Duration(milliseconds: widget.buttonAnimationDuration),
