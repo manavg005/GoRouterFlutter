@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/dashboard/dashboard_bloc.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/home_management_response.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/colors.dart';
@@ -85,6 +86,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
           color: AppColors.priceGreen,
           screenSize: screenSize,
         ),
+        TextButton(
+            onPressed: () {
+              context.go('/dashboard/change-password');
+            },
+            child: Text("Change Password"))
       ],
     );
   }

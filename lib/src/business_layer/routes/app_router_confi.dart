@@ -23,6 +23,7 @@ bool _isAuth = false;
 final router = GoRouter(
   initialLocation: '/login',
   navigatorKey: _rootNavigatorKey,
+  debugLogDiagnostics: true,
   routes: [
     // StatefulShellRoute.indexedStack(
     //     builder: (context, state, navigationShell) {
@@ -32,43 +33,45 @@ final router = GoRouter(
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       builder: (context, state, child) {
-        return ScaffoldWithDrawer();
+        return ScaffoldWithDrawer(
+          state: state,
+          child: child,
+        );
       },
       routes: [
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
           path: '/dashboard',
           pageBuilder: (context, state) {
-            return MaterialPage(key: state.pageKey, child: DashboardScreen());
+            return _pageBuilder(DashboardScreen(), state: state);
           },
           // builder: (context, state) {
           //   return const DashboardScreen();
           // },
-          redirect: (context, state) async {
-            if (await UserStateHiveHelper.instance.getIsUserLoggedIn()) {
-              log("in dashboard");
-              return "/dashboard";
-            } else {
-              log("in login");
-              return "/login";
-            }
-          },
-          // routes: [
-          //   GoRoute(
-          //     name: 'change-password',
-          //     path: 'change-password',
-          //     builder: (context, state) {
-          //       return const ChangePasswordScreen();
-          //     },
-          //   ),
-          // ],
+          // redirect: (context, state) async {
+          //   if (await UserStateHiveHelper.instance.getIsUserLoggedIn()) {
+          //     log("in dashboard");
+          //     return "/dashboard";
+          //   } else {
+          //     log("in login");
+          //     return "/login";
+          //   }
+          // },
+          routes: [
+            GoRoute(
+              name: 'change-password',
+              path: 'change-password',
+              builder: (context, state) {
+                return const ChangePasswordScreen();
+              },
+            ),
+          ],
         ),
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
           path: '/user',
           pageBuilder: (context, state) {
-            return MaterialPage(
-                key: state.pageKey, child: UserManagementScreen());
+            return _pageBuilder(UserManagementScreen(), state: state);
           },
           // builder: (context, state) {
           //   return const UserManagementScreen();
@@ -77,47 +80,53 @@ final router = GoRouter(
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
           path: '/cleaner',
-          builder: (context, state) {
-            return const CleanerManagementScreen();
+          pageBuilder: (context, state) {
+            return _pageBuilder(CleanerManagementScreen(), state: state);
           },
+          // builder: (context, state) {
+          //   return const CleanerManagementScreen();
+          // },
         ),
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
           path: '/payment',
-          builder: (context, state) {
-            return const PaymentManagementScreen();
+          // builder: (context, state) {
+          //   return const PaymentManagementScreen();
+          // },
+          pageBuilder: (context, state) {
+            return _pageBuilder(PaymentManagementScreen(), state: state);
           },
         ),
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
           path: '/booking',
-          builder: (context, state) {
-            return const BookingManagementScreen();
+          pageBuilder: (context, state) {
+            return _pageBuilder(BookingManagementScreen(), state: state);
           },
         ),
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
           path: '/notification',
-          builder: (context, state) {
-            return const NotificationManagementScreen();
+          pageBuilder: (context, state) {
+            return _pageBuilder(NotificationManagementScreen(), state: state);
           },
         ),
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
           path: '/banner',
-          builder: (context, state) {
-            return const BannerManagementScreen();
+          pageBuilder: (context, state) {
+            return _pageBuilder(BannerManagementScreen(), state: state);
           },
         ),
       ],
     ),
-    GoRoute(
-      name: 'change-password',
-      path: '/dashboard/change-password',
-      builder: (context, state) {
-        return const ChangePasswordScreen();
-      },
-    ),
+    // GoRoute(
+    //   name: 'change-password',
+    //   path: '/dashboard/change-password',
+    //   builder: (context, state) {
+    //     return const ChangePasswordScreen();
+    //   },
+    // ),
     GoRoute(
       path: '/login',
       builder: (context, state) {
@@ -146,4 +155,15 @@ final router = GoRouter(
 Future<bool> setUserAsLoggedIn() async {
   bool isLoggedIn = await UserStateHiveHelper.instance.getIsUserLoggedIn();
   return isLoggedIn;
+}
+
+Page<dynamic> _pageBuilder(Widget page, {required GoRouterState state}) {
+  return CustomTransitionPage(
+    key: state.pageKey,
+    child: page,
+    transitionsBuilder: (_, animation, __, child) => FadeTransition(
+      opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+      child: child,
+    ),
+  );
 }

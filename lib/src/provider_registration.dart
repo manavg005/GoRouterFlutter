@@ -20,7 +20,6 @@ class RegisterBloc {
         ),
         BlocProvider(
           create: (context) => DashboardBloc(),
-          child: DashboardScreen(),
         ),
         BlocProvider(
           create: (context) => UserManagementBloc(),

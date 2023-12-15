@@ -83,7 +83,8 @@ class PopUpMenu extends StatelessWidget {
           // value: 'change',
           onTap: () {
             UserStateHiveHelper.instance.setIsUserLoggedIn(false);
-            context.go("/login");
+            // context.go("/login");
+            context.go("/dashboard/change-password");
             CookieManager.addToCookie("drawerIndex", "0");
           },
           child: Row(

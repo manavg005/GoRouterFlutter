@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/utils/responsive.dart';
@@ -22,15 +24,19 @@ import 'package:keypitkleen_flutter_admin/src/ui_layer/screens/home_screen/user_
 class ScaffoldWithDrawer extends StatefulWidget {
   const ScaffoldWithDrawer({
     super.key,
+    required this.state,
+    required this.child,
   });
   // final StatefulNavigationShell navigationShell;
+  final GoRouterState state;
+  final Widget child;
 
   @override
   State<ScaffoldWithDrawer> createState() => _ScaffoldWithDrawerState();
 }
 
 class _ScaffoldWithDrawerState extends State<ScaffoldWithDrawer> {
-  // int _currentIndex = 0;
+  int _currentIndex = 0;
   static List<MyCustomNavBarItem> tabs = [
     MyCustomNavBarItem(
       icon: AppIcons.dashboardIcon,
@@ -84,14 +90,14 @@ class _ScaffoldWithDrawerState extends State<ScaffoldWithDrawer> {
       List.generate(tabs.length, (index) => GlobalKey<NavigatorState>());
 
   final List<Widget> destinations = [
-    const DashboardScreen(),
-    const UserManagementScreen(),
-    const SendNotificationScreen(),
-    const BookingManagementScreen(),
-    const PaymentManagementScreen(),
-    const NotificationManagementScreen(),
-    const BannerManagementScreen(),
-    const ChangePasswordScreen(),
+    // const DashboardScreen(),
+    // const UserManagementScreen(),
+    // const SendNotificationScreen(),
+    // const BookingManagementScreen(),
+    // const PaymentManagementScreen(),
+    // const NotificationManagementScreen(),
+    // const BannerManagementScreen(),
+    // const ChangePasswordScreen(),
   ];
   //
   @override
@@ -144,10 +150,10 @@ class _ScaffoldWithDrawerState extends State<ScaffoldWithDrawer> {
                       PopUpMenu(),
                     ],
                   ),
-                  Expanded(
-                    child: destinations[
-                        int.parse(CookieManager.getCookie("drawerIndex"))],
-                  ),
+                  Expanded(child: widget.child
+                      // destinations[
+                      //     int.parse(CookieManager.getCookie("drawerIndex"))],
+                      ),
                 ],
               ),
             ),
@@ -158,6 +164,7 @@ class _ScaffoldWithDrawerState extends State<ScaffoldWithDrawer> {
   }
 
   Widget _buildNavigationRail() {
+    log("state=====${widget.state.matchedLocation}");
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         var screenSize = MediaQuery.of(context).size;
@@ -173,9 +180,31 @@ class _ScaffoldWithDrawerState extends State<ScaffoldWithDrawer> {
             backgroundColor: AppColors.mainColor,
             extended: Responsive.isDesktop(context),
             labelType: NavigationRailLabelType.none,
-            selectedIndex: int.parse(CookieManager.getCookie("drawerIndex")),
+            // selectedIndex: int.parse(CookieManager.getCookie("drawerIndex")),
+            selectedIndex: widget.state.fullPath == "/dashboard"
+                ? 0
+                : widget.state.fullPath == "/user"
+                    ? 1
+                    : widget.state.fullPath == "/dashboard/change-password"
+                        ? 0
+                        : 2,
             onDestinationSelected: (int index) {
-              _goOtherTab(context, index);
+              switch (index) {
+                case 0:
+                  context.go('/dashboard');
+                  // if you were using currentIndex, then you'd have to change it
+                  // here
+                  _currentIndex = index;
+                case 1:
+                  context.go('/user');
+                  _currentIndex = index;
+                // and here
+                case 2:
+                  context.go('/cleaner');
+                  _currentIndex = index;
+                // and here
+              }
+              // _goOtherTab(context, index);
             },
             destinations: tabs,
             unselectedLabelTextStyle: const TextStyle(
