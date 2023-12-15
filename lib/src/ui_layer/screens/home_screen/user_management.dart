@@ -59,7 +59,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
             return _buildBody(
                 context, state.userManagementResponseModel, state.currentPage);
           } else {
-            return SizedBox();
+            return const SizedBox();
           }
         },
       ),

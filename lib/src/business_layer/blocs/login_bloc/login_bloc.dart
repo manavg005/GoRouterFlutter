@@ -54,7 +54,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         DialogUtil.showToast(_loginResponseModel.msg ?? "");
         emit(LoginSuccessState(loginResponse: _loginResponseModel));
       } else {
-        DialogUtil.showToast(_loginResponseModel.msg! ?? "");
+        DialogUtil.showToast(_loginResponseModel.msg ?? "");
       }
 
       log("inside login");
@@ -102,7 +102,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(ChangePasswordActionState());
         DialogUtil.showToast(_changePasswordResponse.msg ?? "");
       } else {
-        DialogUtil.showToast(_changePasswordResponse.msg! ?? "");
+        DialogUtil.showToast(_changePasswordResponse.msg ?? "");
       }
     } else {
       emit(LoginErrorState(

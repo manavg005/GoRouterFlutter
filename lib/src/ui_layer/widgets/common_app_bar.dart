@@ -1,9 +1,12 @@
+// ignore_for_file: must_be_immutable
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/login_bloc/login_bloc.dart';
-import 'package:keypitkleen_flutter_admin/src/business_layer/routes/login_info.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/routes/route_names.dart';
 import '../../data_layer/local_db/user_state_hive_helper.dart';
 import '../../data_layer/res/colors.dart';
@@ -22,11 +25,11 @@ class CommonAppBar extends StatefulWidget implements PreferredSizeWidget {
   State<CommonAppBar> createState() => _CommonAppBarState();
 
   @override
-  Size get preferredSize => Size.fromHeight(60);
+  Size get preferredSize => const Size.fromHeight(60);
 }
 
 class _CommonAppBarState extends State<CommonAppBar> {
-  LoginBloc _bloc = LoginBloc();
+  final LoginBloc _bloc = LoginBloc();
   String fullName = "";
   String email = "";
   String phoneNumber = "";
@@ -71,7 +74,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
               InkWell(
                   child: AppIcons.arrowDown,
                   onTap: () {
-                    print("Tap");
+                    log("Tap");
                     _showContainer(context, fullName, email, phoneNumber);
                   })
             ],

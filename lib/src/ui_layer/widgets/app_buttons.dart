@@ -352,6 +352,6 @@ class CommonIconButton extends StatelessWidget {
               color: isButtonEnabled ? Colors.black : Colors.grey,
             ),
           )
-        : SizedBox();
+        : const SizedBox();
   }
 }

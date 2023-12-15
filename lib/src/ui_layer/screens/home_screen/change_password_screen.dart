@@ -23,7 +23,7 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-  LoginBloc _bloc = LoginBloc();
+  final LoginBloc _bloc = LoginBloc();
   bool _isCurrentPasswordVisible = false;
   bool _isNewPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
@@ -175,7 +175,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             _saveButton(),
             AppStyles.sbHeight19,
             InkWell(
-                onTap: () => null,
+                onTap: () {},
                 child: const PoppinsNormal500(
                   text: "Cancel",
                   fontSize: 14,

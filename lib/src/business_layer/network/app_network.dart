@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:go_router/go_router.dart';
@@ -121,6 +122,7 @@ class AppNetwork {
               exceptionType: ExceptionType.apiException);
         // case HttpResponseCode.forbidden:
         case HttpResponseCode.unAuthorized:
+          // ignore: use_build_context_synchronously
           navigatorKey.currentContext!.go('/login');
           return BaseApiResponseModel(
               exceptionType: ExceptionType.apiException);
@@ -213,7 +215,7 @@ class AppNetwork {
     try {
       navigatorKey.currentContext!.go('/login');
 
-      print("######Session expired#####");
+      log("######Session expired#####");
 
       /// handle session expired
       DialogUtil.showAlertDialog(
@@ -228,7 +230,7 @@ class AppNetwork {
   }
 
   _logOut() {
-    print("in app network");
+    log("in app network");
 
 /*    UserStateHiveHelper.instance.clearData();
     UserStateHiveHelper.instance.setIsOnboardingCompleted(true);

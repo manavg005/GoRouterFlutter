@@ -17,11 +17,9 @@ class PaymentManagementBloc
   PaymentManagementResponseModel _paymentManagementResponseModel =
       PaymentManagementResponseModel();
 
-  int _currentPage = 1;
+  // int _currentPage = 1;
   PaymentManagementBloc() : super(PaymentManagementInitial()) {
     on<PaymentManagementInitialEvent>(paymentManagementInitialEvent);
-    // on<PaymentManagementLoadMoreEvent>(paymentManagementLoadMoreEvent);
-    // on<PaymentManagementLoadPreviousEvent>(paymentManagementLoadPreviousEvent);
     on<PaymentManagementSearchEvent>(paymentManagementSearchEvent);
   }
 
@@ -66,8 +64,6 @@ class PaymentManagementBloc
       _paymentManagementResponseModel = response.data;
 
       if (_paymentManagementResponseModel.status!) {
-        _currentPage = page;
-
         emit(PaymentManagementSuccessState(
             paymentManagementResponseModel: _paymentManagementResponseModel,
             hasMoreData: (_paymentManagementResponseModel

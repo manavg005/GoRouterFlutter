@@ -79,9 +79,9 @@ class MessageProgressBar extends StatelessWidget {
           ),
           const SizedBox(height: 25),
           shouldShowMessage
-              ? Text(
+              ? const Text(
                   "Please Wait...",
-                  style: const TextStyle(
+                  style: TextStyle(
                       decoration: TextDecoration.none,
                       fontSize: 16,
                       fontWeight: FontWeight.w600,

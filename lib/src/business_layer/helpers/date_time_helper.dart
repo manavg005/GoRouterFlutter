@@ -73,7 +73,6 @@ class DateTimeHelper {
   static String getDayDateMonthYear(DateTime date) {
     var month = date.month;
     var monthName = monthShortName[month] ?? "";
-    var formattedTime = DateFormat.jm().format(date); // 12:34 PM format
 
     return "${weekShortName[date.weekday]}, ${date.day} $monthName ${date.year}";
   }

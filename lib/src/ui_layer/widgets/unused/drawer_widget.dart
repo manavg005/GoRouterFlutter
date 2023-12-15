@@ -1,5 +1,6 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/colors.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/icons.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/styles.dart';
@@ -10,7 +11,7 @@ class CustomDrawer extends StatefulWidget {
   final int selectedIndex;
 
   const CustomDrawer(
-      {Key? key, required this.onItemSelected, required this.selectedIndex});
+      {super.key, required this.onItemSelected, required this.selectedIndex});
 
   @override
   _CustomDrawerState createState() => _CustomDrawerState();

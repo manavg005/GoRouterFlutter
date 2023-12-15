@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/colors.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/res/icons.dart';
@@ -68,7 +67,7 @@ class _CleanerDetailsScreenState extends State<CleanerDetailsScreen> {
       onPressed: () {},
       style: ButtonStyle(
         side: MaterialStateProperty.all<BorderSide>(
-          BorderSide(color: AppColors.buttonLightRed, width: 1.0),
+          const BorderSide(color: AppColors.buttonLightRed, width: 1.0),
         ),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(

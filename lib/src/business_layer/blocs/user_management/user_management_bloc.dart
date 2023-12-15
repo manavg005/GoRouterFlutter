@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/repositories/user_management_repository.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/base/base_api_response_model.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/user_active_inactive_response.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/response/user_management_response.dart';
 
-import '../../helpers/util_helper.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/util_helper.dart';
 
 part 'user_management_event.dart';
 part 'user_management_state.dart';
@@ -19,8 +18,6 @@ class UserManagementBloc
       UserManagementResponseModel();
   UserActiveInactiveResponseModel _activeInactiveResponseModel =
       UserActiveInactiveResponseModel();
-
-  int _currentPage = 1;
 
   UserManagementBloc() : super(UserManagementInitial()) {
     on<UserManagementInitialEvent>(userManagementInitialEvent);
@@ -44,8 +41,6 @@ class UserManagementBloc
       _userManagementResponseModel = response.data;
 
       if (_userManagementResponseModel.status!) {
-        _currentPage = page;
-
         if (page == 1) {
           emit(UserManagementSuccessState(
             userManagementResponseModel: _userManagementResponseModel,

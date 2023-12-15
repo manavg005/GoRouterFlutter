@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/cleaner_management/cleaner_bloc.dart';
@@ -29,7 +28,7 @@ class CleanerManagementScreen extends StatefulWidget {
 }
 
 class _CleanerManagementScreenState extends State<CleanerManagementScreen> {
-  CleanerManagementBloc _bloc = CleanerManagementBloc();
+  final CleanerManagementBloc _bloc = CleanerManagementBloc();
   final TextEditingController _searchController = TextEditingController();
   bool isSelected = false;
   Timer? _debounce;

@@ -107,7 +107,7 @@ class _CommonDropdownWidgetState extends State<CommonDropdownWidget> {
   }
 
   Widget _dropDownOpenedView() {
-    double height = widget.dropDownItems.length * 30;
+    // double height = widget.dropDownItems.length * 30;
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       decoration: BoxDecoration(

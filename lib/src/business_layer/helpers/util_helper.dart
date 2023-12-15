@@ -235,7 +235,7 @@ class UtilHelper {
         localPart[localPart.length - 1];
 
     // Combine the masked local part and domain part to form the masked email
-    String maskedEmail = maskedLocalPart + '@' + domainPart;
+    String maskedEmail = '$maskedLocalPart@$domainPart';
 
     return maskedEmail;
   }

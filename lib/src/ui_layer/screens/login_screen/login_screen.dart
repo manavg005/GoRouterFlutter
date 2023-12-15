@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/login_bloc/login_bloc.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/device_info_helper.dart';
-import 'package:keypitkleen_flutter_admin/src/business_layer/routes/login_info.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/utils/helper/validator.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/local_db/user_state_hive_helper.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/request/login_request_model.dart';
@@ -34,7 +33,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _checkBoxValue = false;
-  bool _isLoading = false;
 
   @override
   void initState() {
@@ -56,13 +54,10 @@ class _LoginScreenState extends State<LoginScreen> {
       listenWhen: (previous, current) => current is LoginActionState,
       // buildWhen: (previous, current) => current is! LoginActionState,
       listener: (context, state) {
-        if (state is LoginLoadingState) {
-          _isLoading = true;
-        }
+        if (state is LoginLoadingState) {}
         if (state is LoginNavigateToHomeActionState) {
           context.goNamed("dashboard");
         } else {
-          _isLoading = false;
           log("Error");
         }
       },
@@ -259,7 +254,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _imageContainer() {
-    return Container(
+    return SizedBox(
       // color: Colors.green,
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
@@ -274,7 +269,7 @@ class _LoginScreenState extends State<LoginScreen> {
           // if (state is LoginLoadingState) {
           //   return const Center(child: CircularProgressIndicator());
           // } else {
-          print("state==>> $state");
+          log("state==>> $state");
           return AnimatedButton(
             disabled: (_emailController.text.isNotEmpty &&
                     _passwordController.text.isNotEmpty &&

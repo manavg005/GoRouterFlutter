@@ -28,7 +28,7 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> {
 
   String? _selectedTarget;
 
-  NotificationBloc _bloc = NotificationBloc();
+  final NotificationBloc _bloc = NotificationBloc();
 
   @override
   void initState() {

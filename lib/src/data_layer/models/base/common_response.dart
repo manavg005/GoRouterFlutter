@@ -8,11 +8,11 @@ class CommonResponse {
   CommonResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     statusCode = json['statusCode'];
-    msg = json['msg'] != null ? json['msg'] : null;
+    msg = json['msg'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
     data['statusCode'] = statusCode;
     data['msg'] = msg;

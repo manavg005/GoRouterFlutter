@@ -1,11 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../../data_layer/res/colors.dart';
+import 'package:keypitkleen_flutter_admin/src/data_layer/res/colors.dart';
 
 class DialogUtil {
   static void showToast(
@@ -74,7 +75,7 @@ class DialogUtil {
                   child: const Text('YES'),
                   onPressed: () => {
                     Navigator.pop(context),
-                    print("Yes Clicked"),
+                    log("Yes Clicked"),
                     onTapped(),
                   },
                 ),

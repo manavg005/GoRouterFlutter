@@ -112,8 +112,8 @@ class AppColors {
   static const Color opacityBlack = Color.fromRGBO(90, 90, 90, 1);
   static const Color dividerFeedbackColor = Color.fromRGBO(244, 242, 242, 1);
 
-  static Color startColor = Color.fromRGBO(81, 163, 80, 1);
-  static Color endColor = Color.fromRGBO(244, 242, 242, 1);
+  static Color startColor = const Color.fromRGBO(81, 163, 80, 1);
+  static Color endColor = const Color.fromRGBO(244, 242, 242, 1);
 
   static String blueLinearGradient =
       "linear-gradient(to right, ${startColor.value.toRadixString(16)}, ${endColor.value.toRadixString(16)})";

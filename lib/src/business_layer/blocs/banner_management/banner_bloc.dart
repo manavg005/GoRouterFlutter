@@ -25,7 +25,6 @@ class BannerBloc extends Bloc<BannerEvent, BannerState> {
   BannerActiveInactiveResponseModel _activeInactiveResponseModel =
       BannerActiveInactiveResponseModel();
 
-  int _currentPage = 1;
   BannerBloc() : super(BannerInitial()) {
     on<BannerInitialEvent>(bannerInitialEvent);
     on<BannerSearchEvent>(bannerSearchEvent);
@@ -77,8 +76,6 @@ class BannerBloc extends Bloc<BannerEvent, BannerState> {
       _bannerManagementResponseModel = response.data;
 
       if (_bannerManagementResponseModel.status!) {
-        _currentPage = page;
-
         emit(BannerSuccessState(
             bannerManagementResponseModel: _bannerManagementResponseModel,
             hasMoreData: (_bannerManagementResponseModel
