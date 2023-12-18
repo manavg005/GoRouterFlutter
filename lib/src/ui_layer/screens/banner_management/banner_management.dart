@@ -21,7 +21,9 @@ import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/data_table.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/base_widget.dart';
 
 class BannerManagementScreen extends StatefulWidget {
-  const BannerManagementScreen({Key? key}) : super(key: key);
+  const BannerManagementScreen({Key? key, required this.nextPath})
+      : super(key: key);
+  final String nextPath;
 
   @override
   State<BannerManagementScreen> createState() => _BannerManagementScreenState();
@@ -100,7 +102,7 @@ class _BannerManagementScreenState extends State<BannerManagementScreen> {
                 const Spacer(),
                 CommonAppButton(
                   onTap: () {
-                    context.go('/banner-management/add-banner');
+                    context.go(widget.nextPath);
                   },
                   text: "Add Banner",
                   fontSize: 12,

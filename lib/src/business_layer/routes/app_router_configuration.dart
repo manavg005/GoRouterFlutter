@@ -19,10 +19,10 @@ import 'package:keypitkleen_flutter_admin/main.dart';
 import 'package:keypitkleen_flutter_admin/src/ui_layer/go_router/navigation_rail_bar.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
-final _shellNavigatorAKey = GlobalKey<NavigatorState>();
+final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final goRouter = GoRouter(
-  initialLocation: '/dashboard',
+  initialLocation: '/login',
   navigatorKey: _rootNavigatorKey,
   debugLogDiagnostics: true,
   redirect: (context, state) async {
@@ -66,11 +66,105 @@ final goRouter = GoRouter(
       name: 'forgot',
       builder: (context, state) => const ForgetPasswordScreen(),
     ),
-    StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) {
-        return ScaffoldWithNestedNavigation(navigationShell: navigationShell);
-      },
-      branches: [
+    ShellRoute(
+        navigatorKey: _shellNavigatorKey,
+        builder: (context, state, child) {
+          return ScaffoldWithNestedNavigation(
+            state: state,
+            child: child,
+          );
+        },
+        routes: [
+          GoRoute(
+            parentNavigatorKey: _shellNavigatorKey,
+            path: '/dashboard',
+            pageBuilder: (context, state) {
+              return _pageBuilder(DashboardScreen(), state: state);
+            },
+            routes: [
+              GoRoute(
+                name: 'change-password',
+                path: 'change-password',
+                builder: (context, state) {
+                  return const ChangePasswordScreen();
+                },
+              ),
+            ],
+          ),
+          GoRoute(
+            parentNavigatorKey: _shellNavigatorKey,
+            path: '/user',
+            pageBuilder: (context, state) {
+              return _pageBuilder(UserManagementScreen(), state: state);
+            },
+            // builder: (context, state) {
+            //   return const UserManagementScreen();
+            // },
+          ),
+          GoRoute(
+            parentNavigatorKey: _shellNavigatorKey,
+            path: '/cleaner',
+            pageBuilder: (context, state) {
+              return _pageBuilder(CleanerManagementScreen(), state: state);
+            },
+            // builder: (context, state) {
+            //   return const CleanerManagementScreen();
+            // },
+          ),
+          GoRoute(
+            parentNavigatorKey: _shellNavigatorKey,
+            path: '/payment',
+            // builder: (context, state) {
+            //   return const PaymentManagementScreen();
+            // },
+            pageBuilder: (context, state) {
+              return _pageBuilder(PaymentManagementScreen(), state: state);
+            },
+          ),
+          GoRoute(
+            parentNavigatorKey: _shellNavigatorKey,
+            path: '/booking',
+            pageBuilder: (context, state) {
+              return _pageBuilder(BookingManagementScreen(), state: state);
+            },
+          ),
+          GoRoute(
+            path: '/notification',
+            pageBuilder: (context, state) {
+              return _pageBuilder(
+                  NotificationManagementScreen(
+                    nextPath: '/notification/send-new-notification',
+                  ),
+                  state: state);
+            },
+            routes: [
+              GoRoute(
+                path: 'send-new-notification',
+                name: RouteNames.sendNewNotification,
+                builder: (context, state) => const SendNotificationScreen(),
+              ),
+            ],
+          ),
+          GoRoute(
+            parentNavigatorKey: _shellNavigatorKey,
+            path: '/banner',
+            pageBuilder: (context, state) {
+              return _pageBuilder(
+                  BannerManagementScreen(
+                    nextPath: '/banner/add-banner',
+                  ),
+                  state: state);
+            },
+            routes: [
+              GoRoute(
+                path: 'add-banner',
+                name: RouteNames.addBanner,
+                builder: (context, state) => const AddBannerScreen(),
+              ),
+            ],
+          ),
+        ]
+        /*branches: [
         StatefulShellBranch(
           navigatorKey: _shellNavigatorAKey,
           routes: [
@@ -212,7 +306,7 @@ final goRouter = GoRouter(
             ),
           ],
         ),
-/*        StatefulShellBranch(
+        StatefulShellBranch(
           navigatorKey: _shellNavigatorGKey,
           routes: [
             // Shopping Cart
@@ -229,12 +323,23 @@ final goRouter = GoRouter(
               ],
             ),
           ],
-        ),*/
-      ],
-    ),
+        ),
+      ],*/
+        ),
   ],
   errorPageBuilder: (context, state) => MaterialPage(
       child: Center(
     child: Text(state.error.toString()),
   )),
 );
+
+Page<dynamic> _pageBuilder(Widget page, {required GoRouterState state}) {
+  return CustomTransitionPage(
+    key: state.pageKey,
+    child: page,
+    transitionsBuilder: (_, animation, __, child) => FadeTransition(
+      opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+      child: child,
+    ),
+  );
+}

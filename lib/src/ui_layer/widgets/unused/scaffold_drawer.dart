@@ -98,7 +98,7 @@ class _ScaffoldWithDrawerState extends State<ScaffoldWithDrawer> {
     const BookingManagementScreen(),
     const PaymentManagementScreen(),
     // const NotificationManagementScreen(),
-    const BannerManagementScreen(),
+    // const BannerManagementScreen(),
     const ChangePasswordScreen(),
   ];
   //

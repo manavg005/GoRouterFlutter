@@ -7,91 +7,91 @@ import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/utils/responsive.
 
 import '../../data_layer/res/styles.dart';
 
-class ScaffoldWithNestedNavigation extends StatelessWidget {
+class ScaffoldWithNestedNavigation extends StatefulWidget {
   const ScaffoldWithNestedNavigation({
     Key? key,
-    required this.navigationShell,
+    required this.state,
+    required this.child,
   }) : super(
             key: key ?? const ValueKey<String>('ScaffoldWithNestedNavigation'));
-  final StatefulNavigationShell navigationShell;
 
-  void _goBranch(int index) {
-    navigationShell.goBranch(
-      index,
-      initialLocation: index == navigationShell.currentIndex,
-    );
-  }
+  final GoRouterState state;
+  final Widget child;
 
   @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      /*if (constraints.maxWidth < 450) {
-        return ScaffoldWithNavigationBar(
-          body: navigationShell,
-          selectedIndex: navigationShell.currentIndex,
-          onDestinationSelected: _goBranch,
-        );
-      } else {*/
-      return ScaffoldWithNavigationRail(
-        body: navigationShell,
-        selectedIndex: navigationShell.currentIndex,
-        onDestinationSelected: _goBranch,
-      );
-      // }
-    });
-  }
+  State<ScaffoldWithNestedNavigation> createState() =>
+      _ScaffoldWithNestedNavigationState();
 }
 
-class ScaffoldWithNavigationBar extends StatelessWidget {
-  const ScaffoldWithNavigationBar({
-    super.key,
-    required this.body,
-    required this.selectedIndex,
-    required this.onDestinationSelected,
-  });
-  final Widget body;
-  final int selectedIndex;
-  final ValueChanged<int> onDestinationSelected;
-
+class _ScaffoldWithNestedNavigationState
+    extends State<ScaffoldWithNestedNavigation> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: body,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: selectedIndex,
-        destinations: <NavigationDestination>[
-          NavigationDestination(
-            label: "Dashboard",
-            icon: AppIcons.dashboardIcon,
-          ),
-          NavigationDestination(
-            label: "User Management",
-            icon: AppIcons.profileIcon,
-          ),
-          NavigationDestination(
-            label: "Cleaner Management",
-            icon: AppIcons.cleanerIcon,
-          ),
-          NavigationDestination(
-            label: "Booking Management",
-            icon: AppIcons.bookingIcon,
-          ),
-          NavigationDestination(
-            label: "Payment Management",
-            icon: AppIcons.paymentIcon,
-          ),
-          NavigationDestination(
-            label: "Notification Management",
-            icon: AppIcons.notificationIcon,
-          ),
-          NavigationDestination(
-            label: "Banner Management",
-            icon: AppIcons.bannerIcon,
-          ),
-        ],
-        onDestinationSelected: onDestinationSelected,
-      ),
-    );
+    int _currentIndex = 0;
+    return LayoutBuilder(builder: (context, constraints) {
+      return ScaffoldWithNavigationRail(
+          body: widget.child,
+          selectedIndex: widget.state.fullPath == "/dashboard"
+              ? 0
+              : widget.state.fullPath == "/user"
+                  ? 1
+                  : widget.state.fullPath == "/dashboard/change-password"
+                      ? 0
+                      : widget.state.fullPath == "/cleaner"
+                          ? 2
+                          : widget.state.fullPath == "/booking"
+                              ? 3
+                              : widget.state.fullPath == "/payment"
+                                  ? 4
+                                  : widget.state.fullPath == "/notification"
+                                      ? 5
+                                      : widget.state.fullPath == "/banner"
+                                          ? 6
+                                          : widget.state.fullPath ==
+                                                  "/notification/send-new-notification"
+                                              ? 5
+                                              : (widget.state.fullPath ==
+                                                          "/banner") ||
+                                                      (widget.state.fullPath ==
+                                                          "/banner/add-banner")
+                                                  ? 6
+                                                  : 9,
+          onDestinationSelected: (int index) {
+            switch (index) {
+              case 0:
+                context.go('/dashboard');
+                // if you were using currentIndex, then you'd have to change it
+                // here
+                _currentIndex = index;
+              case 1:
+                context.go('/user');
+                _currentIndex = index;
+              // and here
+              case 2:
+                context.go('/cleaner');
+                _currentIndex = index;
+              // and here
+              case 3:
+                context.go('/booking');
+                // if you were using currentIndex, then you'd have to change it
+                // here
+                _currentIndex = index;
+              case 4:
+                context.go('/payment');
+                _currentIndex = index;
+              // and here
+              case 5:
+                context.go('/notification');
+                _currentIndex = index;
+              // and here
+              case 6:
+                context.go('/banner');
+                _currentIndex = index;
+              // and here
+            }
+          });
+      // }
+    });
   }
 }
 

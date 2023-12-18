@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/blocs/login_bloc/login_bloc.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/helpers/device_info_helper.dart';
+import 'package:keypitkleen_flutter_admin/src/business_layer/utils/helper/cookies_helper.dart';
 import 'package:keypitkleen_flutter_admin/src/business_layer/utils/helper/validator.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/local_db/user_state_hive_helper.dart';
 import 'package:keypitkleen_flutter_admin/src/data_layer/models/request/login_request_model.dart';
@@ -30,14 +31,16 @@ class _LoginScreenState extends State<LoginScreen> {
   LoginBloc loginBloc = LoginBloc();
   bool passwordVisible = true;
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
   bool _checkBoxValue = false;
 
   @override
   void initState() {
     // loginBloc.add(LoginInitialEvent());
     super.initState();
+    _emailController.text = CookieManager.getCookie('email');
+    _passwordController.text = CookieManager.getCookie('pass');
   }
 
   @override
@@ -215,7 +218,10 @@ class _LoginScreenState extends State<LoginScreen> {
             onChanged: (bool? value) {
               setState(() {
                 _checkBoxValue = value!;
-                FocusManager.instance.primaryFocus?.unfocus();
+                if (_checkBoxValue) {
+                  CookieManager.addToCookie('email', _emailController.text);
+                  CookieManager.addToCookie('pass', _passwordController.text);
+                }
               });
             },
           ),
@@ -271,11 +277,6 @@ class _LoginScreenState extends State<LoginScreen> {
           // } else {
           log("state==>> $state");
           return AnimatedButton(
-            disabled: (_emailController.text.isNotEmpty &&
-                    _passwordController.text.isNotEmpty &&
-                    _checkBoxValue)
-                ? false
-                : true,
             loading: state is LoginLoadingState ? true : false,
             onPressed: () async {
               log("Logged IN Status==>>${await UserStateHiveHelper.instance.getIsUserLoggedIn()}");

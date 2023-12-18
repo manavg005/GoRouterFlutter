@@ -16,11 +16,11 @@ import 'package:keypitkleen_flutter_admin/src/ui_layer/widgets/data_table.dart';
 import '../../widgets/base_widget.dart';
 
 class NotificationManagementScreen extends StatefulWidget {
-  const NotificationManagementScreen({Key? key, required this.detailsPath})
+  const NotificationManagementScreen({Key? key, required this.nextPath})
       : super(key: key);
 
   /// The path to the detail page
-  final String detailsPath;
+  final String nextPath;
   @override
   State<NotificationManagementScreen> createState() =>
       _NotificationManagementScreenState();
@@ -94,8 +94,7 @@ class _NotificationManagementScreenState
                 const Spacer(),
                 InkWell(
                     onTap: () {
-                      context
-                          .go('/notification-management/send-new-notification');
+                      context.go(widget.nextPath);
                     },
                     child: AppIcons.addIcon),
                 AppStyles.sbWidth5,
